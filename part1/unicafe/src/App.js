@@ -22,7 +22,12 @@ const App = () => {
       <button onClick={handleGoodClick}>Good</button>
       <button onClick={handleNeutralClick}>Neutral</button>
       <button onClick={handleBadClick}>Bad</button>
-      <Statistics good={good} bad={bad} neutral={neutral} />
+      <h1>Statistics</h1>
+      {good || neutral || bad ? (
+        <Statistics good={good} bad={bad} neutral={neutral} />
+      ) : (
+        <div>No feedback given</div>
+      )}
     </div>
   );
 };
