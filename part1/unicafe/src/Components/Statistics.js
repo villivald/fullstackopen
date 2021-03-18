@@ -3,14 +3,25 @@ import Statistic from "./Statistic";
 
 const Statistics = ({ good, neutral, bad }) => {
   return (
-    <div>
-      <Statistic text="Good" value={good} />
-      <Statistic text="Neutral" value={neutral} />
-      <Statistic text="Bad" value={bad} />
-      <p>All {good + neutral + bad}</p>
-      <p>Average {(good - bad) / (good + neutral + bad)}</p>
-      <p>Positive {(good / (good + neutral + bad)) * 100}%</p>
-    </div>
+    <table>
+      <tbody>
+        <Statistic text="Good" value={good} />
+        <Statistic text="Neutral" value={neutral} />
+        <Statistic text="Bad" value={bad} />
+        <tr>
+          <td>All</td>
+          <td>{good + neutral + bad}</td>
+        </tr>
+        <tr>
+          <td>Average</td>
+          <td>{(good - bad) / (good + neutral + bad)}</td>
+        </tr>
+        <tr>
+          <td>Positive</td>
+          <td>{(good / (good + neutral + bad)) * 100}%</td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
