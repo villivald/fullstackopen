@@ -3,10 +3,10 @@ import Header from "./Header";
 import Total from "./Total";
 import Content from "./Content";
 
-const Course = (props) => {
+const Course = ({ courses }) => {
   return (
     <>
-      {props.courses.map((course) => {
+      {courses.map((course) => {
         return (
           <div key={course.id}>
             <Header course={course.name} />
