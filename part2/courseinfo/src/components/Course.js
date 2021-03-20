@@ -6,9 +6,15 @@ import Content from "./Content";
 const Course = (props) => {
   return (
     <>
-      <Header course={props.course.name} />
-      <Content parts={props.course.parts} />
-      <Total parts={props.course.parts} />
+      {props.courses.map((course) => {
+        return (
+          <div key={course.id}>
+            <Header course={course.name} />
+            <Content parts={course.parts} />
+            <Total parts={course.parts} />
+          </div>
+        );
+      })}
     </>
   );
 };
