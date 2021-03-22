@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Button from "./components/Button";
+import List from "./components/List";
+import CountryInfo from "./components/CountryInfo";
 
 const App = () => {
   const [countries, setCountries] = useState([]);
+  const [countriesToShow, setCountriesToShow] = useState([]);
   const [filter, setFilter] = useState("");
-
-  const toShow = filter ? (
-    countries
-      .filter((country) =>
-        country.name.toLowerCase().includes(filter.toLowerCase())
-      )
-      .map((country) => <p key={country.numericCode}>{country.name}</p>)
-  ) : (
-    <p></p>
-  );
-
-  const handleChange = (e) => {
-    setFilter(e.target.value);
-  };
+  const [toShow, setToShow] = useState("");
+  const [click, setClick] = useState(false);
 
   useEffect(() => {
     axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
@@ -25,45 +17,50 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const handleClick = (e) => {
+      setCountriesToShow(
+        countries.filter((country) =>
+          country.name.toLowerCase().includes(e.target.value.toLowerCase())
+        )
+      );
+      setClick(true);
+    };
+
+    filter
+      ? setToShow(
+          countries
+            .filter((country) =>
+              country.name.toLowerCase().includes(filter.toLowerCase())
+            )
+            .map((country) => (
+              <div key={country.numericCode}>
+                {country.name}
+                <Button handleClick={handleClick} value={country.name} />
+              </div>
+            ))
+        )
+      : setToShow(<p></p>);
+  }, [countries, filter]);
+
+  const handleChange = (e) => {
+    setFilter(e.target.value);
+    setClick(false);
+  };
+
   return (
     <div>
       <div>
         Find countries: <input onChange={handleChange} value={filter} />
       </div>
       <div>
-        {toShow.length === 1 ? (
-          <div>
-            {countries
-              .filter((country) =>
-                country.name.toLowerCase().includes(filter.toLowerCase())
-              )
-              .map((country) => (
-                <div key={country.numericCode}>
-                  {
-                    <div>
-                      <h1>{country.name}</h1>
-                      <p>Capital {country.capital}</p>
-                      <p>Population {country.population}</p>
-                      <h1>Languages</h1>
-                      <ul>
-                        {country.languages.map((lang) => (
-                          <li key={lang.iso639_1}>{lang.name}</li>
-                        ))}
-                      </ul>
-                      <img
-                        style={{ width: "20%" }}
-                        src={country.flag}
-                        alt={country.name}
-                      />
-                    </div>
-                  }
-                </div>
-              ))}
-          </div>
-        ) : toShow.length < 10 || !filter ? (
-          toShow
+        {click || toShow.length === 1 ? (
+          <CountryInfo
+            countries={toShow.length > 1 ? countriesToShow : countries}
+            filter={filter}
+          />
         ) : (
-          "Too many matches, specify another filter"
+          <List toShow={toShow} filter={filter} />
         )}
       </div>
     </div>
