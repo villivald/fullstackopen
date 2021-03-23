@@ -36,11 +36,13 @@ const Weather = ({ city }) => {
     return (
       <div>
         <h1>Weather in {city}</h1>
-        <p>Temperature: {weather.current.temperature}</p>
+        <p>
+          <strong>Temperature:</strong> {weather.current.temperature} Celsius
+        </p>
         <img src={weather.current.weather_icons[0]} alt="weather" />
         <p>
-          Wind: {weather.current.wind_speed} mph direction{" "}
-          {weather.current.wind_direction}
+          <strong>Wind:</strong> {weather.current.wind_speed} km/h direction{" "}
+          {weather.current.wind_dir}
         </p>
       </div>
     );
