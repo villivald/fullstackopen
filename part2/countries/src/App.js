@@ -12,7 +12,7 @@ const App = () => {
   const [click, setClick] = useState(false);
 
   useEffect(() => {
-    axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
+    axios.get("http://restcountries.eu/rest/v2/all").then((response) => {
       setCountries(response.data);
     });
   }, []);

@@ -15,11 +15,8 @@ const Weather = ({ city }) => {
         cancelToken: source.token,
       })
       .catch((error) => {
-        if (axios.isCancel(error)) {
-          console.log("Request canceled", error.message);
-        } else {
-          throw error;
-        }
+        console.log("Request canceled", error.message);
+        throw error;
       })
       .then((response) => {
         if (response.statusText === "OK") {
@@ -34,8 +31,8 @@ const Weather = ({ city }) => {
       source.cancel("Weather component is unmounting");
     };
   }, [city]);
-
-  if (weather) {
+  console.log(weather);
+  if (weather && weather.current) {
     return (
       <div>
         <h1>Weather in {city}</h1>
