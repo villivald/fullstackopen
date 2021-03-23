@@ -9,7 +9,7 @@ const Weather = ({ city }) => {
     axios
       .get("http://api.weatherstack.com/current", {
         params: {
-          access_key: "7d61cadc6c7a4731542f76f99aee572d",
+          access_key: process.env.REACT_APP_API_KEY,
           query: city,
         },
         cancelToken: source.token,
