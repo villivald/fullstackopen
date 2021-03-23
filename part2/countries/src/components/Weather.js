@@ -38,6 +38,7 @@ const Weather = ({ city }) => {
   if (weather) {
     return (
       <div>
+        <h1>Weather in {city}</h1>
         <p>Temperature: {weather.current.temperature}</p>
         <img src={weather.current.weather_icons[0]} alt="weather" />
         <p>
@@ -47,7 +48,6 @@ const Weather = ({ city }) => {
       </div>
     );
   } else {
-    console.log(weather);
     return <div></div>;
   }
 };
