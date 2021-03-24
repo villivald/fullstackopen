@@ -19,6 +19,16 @@
       "name": "Mary Poppendieck",
       "phone": "39-23-6423122",
       "id": 4
+    },
+    {
+      "name": "Jimmy Banana",
+      "id": 5,
+      "phone": "0507689823"
+    },
+    {
+      "name": "Jukka Pekka",
+      "id": 6,
+      "phone": "31592020"
     }
   ]
 }
