@@ -16,6 +16,14 @@ const App = () => {
     });
   }, []);
 
+  const handleRemove = (id, name) => {
+    window.confirm(`Delete ${name}?`) &&
+      phonebookService.remove(id).then(() => {
+        const newPersons = persons.filter((item) => item.id !== id);
+        setPersons(newPersons);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const noteObject = {
@@ -57,7 +65,7 @@ const App = () => {
         phone={phone}
       />
       <h2>Numbers</h2>
-      <Persons filter={filter} persons={persons} />
+      <Persons filter={filter} persons={persons} deletePerson={handleRemove} />
     </div>
   );
 };

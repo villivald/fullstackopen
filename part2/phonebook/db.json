@@ -2,38 +2,23 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "phone": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "phone": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "phone": "12-43-234345",
-      "id": 3
+      "id": 1,
+      "phone": "040-123456"
     },
     {
       "name": "Mary Poppendieck",
-      "phone": "39-23-6423122",
-      "id": 4
+      "id": 2,
+      "phone": "39-23-6423122"
     },
     {
       "name": "Jimmy Banana",
-      "id": 5,
+      "id": 3,
       "phone": "0507689823"
     },
     {
-      "name": "Jukka Pekka",
-      "id": 6,
-      "phone": "31592020"
-    },
-    {
       "name": "John Doe",
-      "id": 7,
-      "phone": "050-7215647"
+      "id": 4,
+      "phone": "050-4678756"
     }
   ]
 }
