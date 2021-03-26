@@ -28,15 +28,32 @@ const App = () => {
     e.preventDefault();
     const noteObject = {
       name: newName,
-      id: persons.length + 1,
       phone: phone,
     };
 
-    persons.some((p) => p.name === newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : phonebookService.create(noteObject).then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-        });
+    const personToChange = persons.some((p) => p.name === newName);
+
+    if (personToChange) {
+      const oldPerson = persons.find((p) => p.name === newName);
+      const newPerson = { ...oldPerson, phone: phone };
+
+      window.confirm(
+        `${newName} ia already added to phonebook, replace the old number with a new one?`
+      ) &&
+        phonebookService
+          .update(oldPerson.id, newPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== oldPerson.id ? person : returnedPerson
+              )
+            );
+          });
+    } else {
+      phonebookService.create(noteObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+      });
+    }
 
     setNewName("");
     setPhone("");
