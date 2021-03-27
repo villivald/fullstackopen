@@ -3,12 +3,14 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import phonebookService from "./services/phonebook";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [phone, setPhone] = useState("");
   const [filter, setFilter] = useState("");
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     phonebookService.getAll().then((initialPersons) => {
@@ -49,9 +51,17 @@ const App = () => {
               )
             );
           });
+      setToggle(!toggle);
+      setTimeout(() => {
+        setToggle(false);
+      }, 5000);
     } else {
       phonebookService.create(noteObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
+        setToggle(!toggle);
+        setTimeout(() => {
+          setToggle(false);
+        }, 5000);
       });
     }
 
@@ -72,6 +82,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {toggle && <Notification name={persons[persons.length - 1].name} />}
       <Filter handleFilter={handleFilter} filter={filter} />
       <h2>Add a new number</h2>
       <PersonForm
