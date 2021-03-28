@@ -12,7 +12,8 @@ code {
     monospace;
 }
 
-.notification {
+.notification,
+.warning {
   background-color: rgb(197, 188, 188);
   font-size: 1.5rem;
   width: 20%;
@@ -20,4 +21,8 @@ code {
   border: 1px solid green;
   border-radius: 4px;
   margin-bottom: 2%;
+}
+.warning {
+  color: red;
+  border: 1px solid red;
 }

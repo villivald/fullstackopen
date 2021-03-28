@@ -11,6 +11,9 @@ const App = () => {
   const [phone, setPhone] = useState("");
   const [filter, setFilter] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [notificationText, setNotificationText] = useState("");
+  const [notificationName, setNotificationName] = useState();
+  const [notificationStyle, setNotificationStyle] = useState("notification");
 
   useEffect(() => {
     phonebookService.getAll().then((initialPersons) => {
@@ -20,10 +23,28 @@ const App = () => {
 
   const handleRemove = (id, name) => {
     window.confirm(`Delete ${name}?`) &&
-      phonebookService.remove(id).then(() => {
-        const newPersons = persons.filter((item) => item.id !== id);
-        setPersons(newPersons);
-      });
+      phonebookService
+        .remove(id)
+        .then(() => {
+          const newPersons = persons.filter((item) => item.id !== id);
+          setPersons(newPersons);
+          setNotificationStyle("notification");
+          setNotificationText("Succesfully deleted ");
+          setNotificationName(name);
+          setToggle(!toggle);
+          setTimeout(() => {
+            setToggle(false);
+          }, 5000);
+        })
+        .catch(() => {
+          setNotificationStyle("warning");
+          setNotificationText("Number is already deleted from the phonebook: ");
+          setNotificationName(name);
+          setToggle(!toggle);
+          setTimeout(() => {
+            setToggle(false);
+          }, 5000);
+        });
   };
 
   const handleSubmit = (e) => {
@@ -50,14 +71,31 @@ const App = () => {
                 person.id !== oldPerson.id ? person : returnedPerson
               )
             );
+            setNotificationStyle("notification");
+            setNotificationText("Updated ");
+            setNotificationName(oldPerson.name);
+            setToggle(!toggle);
+            setTimeout(() => {
+              setToggle(false);
+            }, 5000);
+          })
+          .catch(() => {
+            setNotificationStyle("warning");
+            setNotificationText(
+              "This number was already deleted from the phonebook: "
+            );
+            setNotificationName(oldPerson.name);
+            setToggle(!toggle);
+            setTimeout(() => {
+              setToggle(false);
+            }, 5000);
           });
-      setToggle(!toggle);
-      setTimeout(() => {
-        setToggle(false);
-      }, 5000);
     } else {
       phonebookService.create(noteObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
+        setNotificationStyle("notification");
+        setNotificationText("Added ");
+        setNotificationName(returnedPerson.name);
         setToggle(!toggle);
         setTimeout(() => {
           setToggle(false);
@@ -82,7 +120,13 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {toggle && <Notification name={persons[persons.length - 1].name} />}
+      {toggle && (
+        <Notification
+          text={notificationText}
+          name={notificationName}
+          style={notificationStyle}
+        />
+      )}
       <Filter handleFilter={handleFilter} filter={filter} />
       <h2>Add a new number</h2>
       <PersonForm
