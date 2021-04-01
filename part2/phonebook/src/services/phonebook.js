@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "/api/persons/";
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -12,12 +12,12 @@ const create = (noteObject) => {
 };
 
 const remove = (id) => {
-  const request = axios.delete(`http://localhost:3001/persons/${id}`);
+  const request = axios.delete(`${baseUrl}${id}`);
   return request.then((response) => response.data);
 };
 
 const update = (id, noteObject) => {
-  const request = axios.put(`http://localhost:3001/persons/${id}`, noteObject);
+  const request = axios.put(`${baseUrl}${id}`, noteObject);
   return request.then((response) => response.data);
 };
 
