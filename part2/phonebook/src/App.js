@@ -56,55 +56,76 @@ const App = () => {
 
     const personToChange = persons.some((p) => p.name === newName);
 
-    if (personToChange) {
-      const oldPerson = persons.find((p) => p.name === newName);
-      const newPerson = { ...oldPerson, phone: phone };
+    const oldPerson = persons.find((p) => p.name === newName);
+    const newPerson = { ...oldPerson, phone: phone };
 
-      window.confirm(
-        `${newName} ia already added to phonebook, replace the old number with a new one?`
-      ) &&
+    if (newPerson.phone.length < 8) {
+      setNotificationStyle("warning");
+      setNotificationText("This number is too short (min. 8 digits): ");
+      setNotificationName(newPerson.phone);
+      setToggle(!toggle);
+      setTimeout(() => {
+        setToggle(false);
+      }, 5000);
+    } else {
+      if (personToChange) {
+        window.confirm(
+          `${newName} ia already added to phonebook, replace the old number with a new one?`
+        ) &&
+          phonebookService
+            .update(oldPerson.id, newPerson)
+            .then((returnedPerson) => {
+              setPersons(
+                persons.map((person) =>
+                  person.id !== oldPerson.id ? person : returnedPerson
+                )
+              );
+              setNotificationStyle("notification");
+              setNotificationText("Updated ");
+              setNotificationName(oldPerson.name);
+              setToggle(!toggle);
+              setTimeout(() => {
+                setToggle(false);
+              }, 5000);
+            })
+            .catch(() => {
+              setNotificationStyle("warning");
+              setNotificationText(
+                "This number was already deleted from the phonebook: "
+              );
+              setNotificationName(oldPerson.name);
+              setToggle(!toggle);
+              setTimeout(() => {
+                setToggle(false);
+              }, 5000);
+            });
+      } else {
         phonebookService
-          .update(oldPerson.id, newPerson)
+          .create(noteObject)
           .then((returnedPerson) => {
-            setPersons(
-              persons.map((person) =>
-                person.id !== oldPerson.id ? person : returnedPerson
-              )
-            );
+            setPersons(persons.concat(returnedPerson));
             setNotificationStyle("notification");
-            setNotificationText("Updated ");
-            setNotificationName(oldPerson.name);
+            setNotificationText("Added ");
+            setNotificationName(returnedPerson.name);
             setToggle(!toggle);
             setTimeout(() => {
               setToggle(false);
             }, 5000);
           })
-          .catch(() => {
+          .catch((error) => {
             setNotificationStyle("warning");
-            setNotificationText(
-              "This number was already deleted from the phonebook: "
-            );
-            setNotificationName(oldPerson.name);
+            setNotificationText(`${error.response.data.error}`);
+            setNotificationName(" ");
             setToggle(!toggle);
             setTimeout(() => {
               setToggle(false);
             }, 5000);
           });
-    } else {
-      phonebookService.create(noteObject).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNotificationStyle("notification");
-        setNotificationText("Added ");
-        setNotificationName(returnedPerson.name);
-        setToggle(!toggle);
-        setTimeout(() => {
-          setToggle(false);
-        }, 5000);
-      });
-    }
+      }
 
-    setNewName("");
-    setPhone("");
+      setNewName("");
+      setPhone("");
+    }
   };
 
   const handleNameChange = (e) => {
