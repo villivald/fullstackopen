@@ -55,40 +55,39 @@ const App = () => {
     };
 
     const personToChange = persons.some((p) => p.name === newName);
-
     const oldPerson = persons.find((p) => p.name === newName);
     const newPerson = { ...oldPerson, phone: phone };
 
-    if (newPerson.phone.length < 8) {
-      setNotificationStyle("warning");
-      setNotificationText("This number is too short (min. 8 digits): ");
-      setNotificationName(newPerson.phone);
-      setToggle(!toggle);
-      setTimeout(() => {
-        setToggle(false);
-      }, 5000);
-    } else {
-      if (personToChange) {
-        window.confirm(
-          `${newName} ia already added to phonebook, replace the old number with a new one?`
-        ) &&
-          phonebookService
-            .update(oldPerson.id, newPerson)
-            .then((returnedPerson) => {
-              setPersons(
-                persons.map((person) =>
-                  person.id !== oldPerson.id ? person : returnedPerson
-                )
-              );
-              setNotificationStyle("notification");
-              setNotificationText("Updated ");
-              setNotificationName(oldPerson.name);
+    if (personToChange) {
+      window.confirm(
+        `${newName} ia already added to phonebook, replace the old number with a new one?`
+      ) &&
+        phonebookService
+          .update(oldPerson.id, newPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== oldPerson.id ? person : returnedPerson
+              )
+            );
+            setNotificationStyle("notification");
+            setNotificationText("Updated ");
+            setNotificationName(oldPerson.name);
+            setToggle(!toggle);
+            setTimeout(() => {
+              setToggle(false);
+            }, 5000);
+          })
+          .catch((error) => {
+            if (error.response.status === 406) {
+              setNotificationStyle("warning");
+              setNotificationText(`${error.response.data.error}`);
+              setNotificationName(" ");
               setToggle(!toggle);
               setTimeout(() => {
                 setToggle(false);
               }, 5000);
-            })
-            .catch(() => {
+            } else {
               setNotificationStyle("warning");
               setNotificationText(
                 "This number was already deleted from the phonebook: "
@@ -98,34 +97,34 @@ const App = () => {
               setTimeout(() => {
                 setToggle(false);
               }, 5000);
-            });
-      } else {
-        phonebookService
-          .create(noteObject)
-          .then((returnedPerson) => {
-            setPersons(persons.concat(returnedPerson));
-            setNotificationStyle("notification");
-            setNotificationText("Added ");
-            setNotificationName(returnedPerson.name);
-            setToggle(!toggle);
-            setTimeout(() => {
-              setToggle(false);
-            }, 5000);
-          })
-          .catch((error) => {
-            setNotificationStyle("warning");
-            setNotificationText(`${error.response.data.error}`);
-            setNotificationName(" ");
-            setToggle(!toggle);
-            setTimeout(() => {
-              setToggle(false);
-            }, 5000);
+            }
           });
-      }
-
-      setNewName("");
-      setPhone("");
+    } else {
+      phonebookService
+        .create(noteObject)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNotificationStyle("notification");
+          setNotificationText("Added ");
+          setNotificationName(returnedPerson.name);
+          setToggle(!toggle);
+          setTimeout(() => {
+            setToggle(false);
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotificationStyle("warning");
+          setNotificationText(`${error.response.data.error}`);
+          setNotificationName(" ");
+          setToggle(!toggle);
+          setTimeout(() => {
+            setToggle(false);
+          }, 5000);
+        });
     }
+
+    setNewName("");
+    setPhone("");
   };
 
   const handleNameChange = (e) => {
