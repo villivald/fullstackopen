@@ -4,9 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd /Users/mv/Developer/fullstackopen2021/part2/phonebook && npm run build --prod && cp -r build /Users/mv/Developer/fullstackopen2021-part3",
+    "deploy": "git push heroku master",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint .",
+    "test": "jest --verbose"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +25,10 @@
   },
   "devDependencies": {
     "eslint": "^7.23.0",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.7"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
