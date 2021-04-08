@@ -105,3 +105,21 @@ describe("favorite blog", () => {
     );
   });
 });
+
+describe("most blogs", () => {
+  test("when list is empty", () => {
+    expect(listHelper.mostBlogs(emptyList)).toBe(null);
+  });
+  test("when list has only one blog", () => {
+    expect(listHelper.mostBlogs(listWithOneBlog)).toEqual({
+      author: "Edsger W. Dijkstra",
+      blogs: 1,
+    });
+  });
+  test("when we have a bigger list", () => {
+    expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
+  });
+});
