@@ -90,7 +90,7 @@ describe("total likes", () => {
   });
 });
 
-describe("favorite blog", () => {
+describe("Favorite blog", () => {
   test("when list is empty", () => {
     expect(listHelper.favoriteBlog(emptyList)).toEqual(0);
   });
@@ -106,7 +106,7 @@ describe("favorite blog", () => {
   });
 });
 
-describe("most blogs", () => {
+describe("Author with the most blogs", () => {
   test("when list is empty", () => {
     expect(listHelper.mostBlogs(emptyList)).toBe(null);
   });
@@ -120,6 +120,24 @@ describe("most blogs", () => {
     expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual({
       author: "Robert C. Martin",
       blogs: 3,
+    });
+  });
+});
+
+describe("Author with the most likes", () => {
+  test("when list is empty", () => {
+    expect(listHelper.mostLikes(emptyList)).toBe(null);
+  });
+  test("when list has only one blog", () => {
+    expect(listHelper.mostLikes(listWithOneBlog)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 5,
+    });
+  });
+  test("when we have a bigger list", () => {
+    expect(listHelper.mostLikes(listWithManyBlogs)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17,
     });
   });
 });

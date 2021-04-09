@@ -24,7 +24,7 @@ const mostBlogs = (blogs) => {
   if (blogs.length === 0) {
     return null;
   }
-  let result = _(blogs).countBy("author").value();
+  let result = _.countBy(blogs, "author");
   const sortedBlogs = Object.values(result).sort((a, b) => b - a);
   const sortedResult = Object.keys(result).sort(
     (a, b) => result[b] - result[a]
@@ -33,9 +33,34 @@ const mostBlogs = (blogs) => {
   return mostBlogsObject;
 };
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return null;
+  }
+
+  const reducer = (acc, blog) => {
+    return !acc[blog.author]
+      ? { ...acc, [blog.author]: blog.likes }
+      : { ...acc, [blog.author]: acc[blog.author] + blog.likes };
+  };
+
+  const likes = _.reduce(blogs, reducer, {});
+  const mostLikedAuthor = Object.keys(likes).sort(
+    (a, b) => likes[b] - likes[a]
+  )[0];
+
+  const mostLikesObject = {
+    author: mostLikedAuthor,
+    likes: likes[mostLikedAuthor],
+  };
+
+  return mostLikesObject;
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
