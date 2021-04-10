@@ -69,6 +69,26 @@ test("a valid blog can be added", async () => {
   expect(blogsAfterAdding).toHaveLength(helper.initialBlogs.length + 1);
 });
 
+// IF NO LIKES IN REQUEST, LIKES === 0
+test("if request has no likes property likes are set to 0", async () => {
+  const newBlog = {
+    title: "A Poor Blog",
+    author: "Ivan Da Marja",
+    url: "toupper.case",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAfterAdding = await helper.blogsInDb();
+  const likesOfAdedBlog = blogsAfterAdding[blogsAfterAdding.length - 1].likes;
+
+  expect(likesOfAdedBlog).toBe(0);
+});
+
 // BLOG WITHOUT CONTENT IS NOT OK
 test("blog without content is not added", async () => {
   const newBlog = {};
