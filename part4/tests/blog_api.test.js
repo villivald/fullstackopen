@@ -28,6 +28,12 @@ test("there are right amount of blogs", async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length);
 });
 
+test("blog has a unique id named 'id'", async () => {
+  const response = await api.get("/api/blogs");
+
+  expect(response.body[0].id).toBeDefined();
+});
+
 test("a specific title is within the returned blogs", async () => {
   const response = await api.get("/api/blogs");
 
