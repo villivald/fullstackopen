@@ -143,7 +143,7 @@ describe("addition of a new blog", () => {
   });
 });
 
-describe("deletion of a note", () => {
+describe("deletion of a blog", () => {
   // CAN DELETE A BLOG
   test("a blog can be deleted", async () => {
     const blogsAtStart = await helper.blogsInDb();
@@ -157,6 +157,34 @@ describe("deletion of a note", () => {
     const contents = blogsAtEnd.map((r) => r.title);
 
     expect(contents).not.toContain(blogToDelete.title);
+  });
+});
+
+describe("updating of a blog", () => {
+  // CAN UPDATE A BLOG
+  test("blog can be updated", async () => {
+    const newBlog = {
+      title: "A Brilliant Blog",
+      author: "John Bon Jovi",
+      url: "bbbblog.net",
+      likes: 1000,
+    };
+
+    const initialBlogs = await helper.blogsInDb();
+    const blogToUpdate = initialBlogs[0];
+    // console.log(blogToUpdate);
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog).expect(200);
+
+    const blogsAfterUpdating = await helper.blogsInDb();
+
+    const updatedBlog = blogsAfterUpdating[0];
+    // console.log(updatedBlog);
+
+    expect(blogsAfterUpdating).toHaveLength(helper.initialBlogs.length);
+
+    expect(updatedBlog.likes).toBe(1000);
+    expect(updatedBlog.author).toBe("John Bon Jovi");
   });
 });
 

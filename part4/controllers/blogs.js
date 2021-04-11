@@ -39,7 +39,7 @@ blogsRouter.delete("/:id", async (request, response) => {
 });
 
 // UPDATE A BLOG
-blogsRouter.put("/:id", (request, response, next) => {
+blogsRouter.put("/:id", async (request, response) => {
   const body = request.body;
 
   const blog = {
@@ -49,11 +49,17 @@ blogsRouter.put("/:id", (request, response, next) => {
     likes: body.likes,
   };
 
-  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-    .then((updatedBlog) => {
-      response.json(updatedBlog);
-    })
-    .catch((error) => next(error));
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  });
+
+  if (updatedBlog) {
+    response.json(updatedBlog);
+  } else {
+    return response.status(404).end();
+  }
 });
 
 module.exports = blogsRouter;
