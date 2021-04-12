@@ -8,7 +8,7 @@ const User = require("../models/user");
 
 describe("when there is initially one user in db", () => {
   beforeEach(async () => {
-    await User.deleteMany({});
+    await User.deleteMany({ username: { $ne: "test" } });
 
     const passwordHash = await bcrypt.hash("sekret", 10);
     const user = new User({ username: "root", passwordHash });
@@ -54,6 +54,36 @@ describe("when there is initially one user in db", () => {
       .expect("Content-Type", /application\/json/);
 
     expect(result.body.error).toContain("`username` to be unique");
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
+
+  test("username is shorter than 3 characters", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "J",
+      name: "Jim Johnson",
+      password: "salainen",
+    };
+
+    await api.post("/api/users").send(newUser).expect(400);
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
+
+  test("password is shorter than 3 characters", async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: "John",
+      name: "Jim Johnson",
+      password: "s",
+    };
+
+    await api.post("/api/users").send(newUser).expect(404);
 
     const usersAtEnd = await helper.usersInDb();
     expect(usersAtEnd).toHaveLength(usersAtStart.length);

@@ -18,18 +18,23 @@ usersRouter.delete("/:id", async (request, response) => {
 usersRouter.post("/", async (request, response) => {
   const body = request.body;
 
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(body.password, saltRounds);
+  if (request.body.password.length < 3) {
+    response.status(404).json({
+      error: "password must be at least 3 characters long",
+    });
+  } else {
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
-  const user = new User({
-    username: body.username,
-    name: body.name,
-    passwordHash,
-  });
+    const user = new User({
+      username: body.username,
+      name: body.name,
+      passwordHash,
+    });
 
-  const savedUser = await user.save();
-
-  response.json(savedUser);
+    const savedUser = await user.save();
+    response.json(savedUser);
+  }
 });
 
 module.exports = usersRouter;

@@ -83,9 +83,10 @@ describe("addition of a new blog", () => {
   test("a valid blog can be added", async () => {
     const newBlog = {
       title: "A Brilliant Blog",
-      author: "John Bon Jovi",
-      url: "bbbblog.net",
+      author: "T.B Morgan",
+      url: "bbg.net",
       likes: 1000,
+      userId: "60744525b0fc3bc68325e172",
     };
 
     await api
@@ -108,6 +109,7 @@ describe("addition of a new blog", () => {
       title: "A Poor Blog",
       author: "Ivan Da Marja",
       url: "toupper.case",
+      userId: "60744525b0fc3bc68325e172",
     };
 
     await api
@@ -127,6 +129,7 @@ describe("addition of a new blog", () => {
     const newBlog = {
       author: "Ivan Da Marja",
       likes: 1,
+      userId: "60744525b0fc3bc68325e172",
     };
 
     await api.post("/api/blogs").send(newBlog).expect(400);
@@ -134,7 +137,7 @@ describe("addition of a new blog", () => {
 
   // BLOG WITHOUT CONTENT -> 400
   test("blog without content is not added", async () => {
-    const newBlog = {};
+    const newBlog = { userId: "60744525b0fc3bc68325e172" };
 
     await api.post("/api/blogs").send(newBlog).expect(400);
 
