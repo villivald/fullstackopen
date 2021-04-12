@@ -21,7 +21,11 @@ blogsRouter.get("/:id", async (request, response) => {
 // ADD NEW BLOG
 blogsRouter.post("/", async (request, response) => {
   const body = request.body;
-  const user = await User.findById(body.userId);
+
+  const user =
+    body.userId === undefined
+      ? await User.findOne({})
+      : await User.findById(body.userId);
 
   const blog = new Blog({
     title: body.title,

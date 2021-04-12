@@ -2,9 +2,9 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "My New Blog",
-    "author": "K. Irving",
-    "url": "uncledrew.com",
-    "likes": 6,
+    "title": "KYRIE IRVING FAN",
+    "author": "LBJ",
+    "url": "miami.com",
+    "likes": 6666,
     "userId": "607461fee511b670a1530fc5"
 }
