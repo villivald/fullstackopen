@@ -1,10 +1,11 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxlYnJvbiBKYW1lcyIsImlkIjoiNjA3NDYxZTBlNTExYjY3MGExNTMwZmM0IiwiaWF0IjoxNjE4MzMyNTEwfQ.alXU7XMtJKp9E3N_t57FsJGnHa8SbsRzTWMh1MoehS4
 
 {
-    "title": "KYRIE IRVING FAN",
-    "author": "LBJ",
-    "url": "miami.com",
-    "likes": 6666,
-    "userId": "607461fee511b670a1530fc5"
+    "title": "Testin Tokens",
+    "author": "Tester",
+    "url": "test.com",
+    "likes": 123,
+    "userId": "607461e0e511b670a1530fc4"
 }
