@@ -1,1 +1,2 @@
-DELETE http://localhost:3003/api/blogs/60748dc1283a46767a1a2c78
+DELETE http://localhost:3003/api/blogs/6076a48d27cb2bc557e5534c
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxlYnJvbiBKYW1lcyIsImlkIjoiNjA3NDYxZTBlNTExYjY3MGExNTMwZmM0IiwiaWF0IjoxNjE4Mzk2MTEwLCJleHAiOjE2MTgzOTk3MTB9.KrpMni1xySSNiOZ2MOzSnNlKHk9vkToT7mLQgpIBcI4
