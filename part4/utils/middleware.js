@@ -1,6 +1,7 @@
 const morgan = require("morgan");
 const logger = require("./logger");
 
+// MORGAN
 morgan.token("data", (req) => {
   return JSON.stringify(req.body);
 });
@@ -13,9 +14,12 @@ const morganLogger = () => {
   );
 };
 
+// UNKNOWN ENDPOINT
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
+
+// ERROR HANDLER
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
 
@@ -32,8 +36,20 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
+// TOKEN EXTRACTOR
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get("authorization");
+
+  authorization && authorization.toLowerCase().startsWith("bearer ")
+    ? (request.token = authorization.substring(7))
+    : (request.token = null);
+
+  next();
+};
+
 module.exports = {
   unknownEndpoint,
   errorHandler,
   morganLogger,
+  tokenExtractor,
 };

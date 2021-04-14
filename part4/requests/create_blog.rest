@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikt5cmllIElydmluZyIsImlkIjoiNjA3NDYxZmVlNTExYjY3MGExNTMwZmM1IiwiaWF0IjoxNjE4Mzg5Mjc5LCJleHAiOjE2MTgzOTI4Nzl9.KIOdqX4v6dDDECrhZtP3TZRfcGIo4ltL6T1nyCH4mhw
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikt5cmllIElydmluZyIsImlkIjoiNjA3NDYxZmVlNTExYjY3MGExNTMwZmM1IiwiaWF0IjoxNjE4Mzk0ODc1LCJleHAiOjE2MTgzOTg0NzV9.2DsXehoDOlHoCn8C8DLrYjI0R2SN2uJsdOxUsu8qNJI
 
 {
-    "title": "New Test Blog",
+    "title": "About Me2",
     "author": "Tester",
     "url": "test.com",
     "likes": 123
