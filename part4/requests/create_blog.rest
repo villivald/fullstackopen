@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikt5cmllIElydmluZyIsImlkIjoiNjA3NDYxZmVlNTExYjY3MGExNTMwZmM1IiwiaWF0IjoxNjE4Mzk1OTMzLCJleHAiOjE2MTgzOTk1MzN9.IqSKVfYNfRpaVSi4ks_hSJ2WcpS_isU34fr0pWgPLaE
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikt5cmllIElydmluZyIsImlkIjoiNjA3NDYxZmVlNTExYjY3MGExNTMwZmM1IiwiaWF0IjoxNjE4NDg5ODYxLCJleHAiOjE2MTg0OTM0NjF9.9Gril5HrPrUm5Gbz1SgcJY-rf2hcmX-JCCKGPQ6FW1M
 
 {
-    "title": "About Me2",
+    "title": "USER EXTRACTOR by Kyrie",
     "author": "Tester",
     "url": "test.com",
     "likes": 123

@@ -1,7 +1,7 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
-const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const middleware = require("../utils/middleware");
 
 // GET ALL BLOGS
 blogsRouter.get("/", async (request, response) => {
@@ -20,14 +20,14 @@ blogsRouter.get("/:id", async (request, response) => {
 });
 
 // ADD NEW BLOG
-blogsRouter.post("/", async (request, response) => {
+blogsRouter.post("/", middleware.userExtractor, async (request, response) => {
   const body = request.body;
+  const user = request.user;
 
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
   if (!request.token || !decodedToken.id) {
     return response.status(401).json({ error: "token missing or invalid" });
   }
-  const user = await User.findById(decodedToken.id);
 
   const blog = new Blog({
     title: body.title,
@@ -49,26 +49,29 @@ blogsRouter.post("/", async (request, response) => {
 });
 
 // DELETE A BLOG
-blogsRouter.delete("/:id", async (request, response) => {
-  const blog = await Blog.findById(request.params.id);
+blogsRouter.delete(
+  "/:id",
+  middleware.userExtractor,
+  async (request, response) => {
+    const blog = await Blog.findById(request.params.id);
+    const user = request.user;
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
-  if (!request.token || !decodedToken.id) {
-    return response.status(401).json({ error: "token missing or invalid" });
+    if (!request.token || !decodedToken.id) {
+      return response.status(401).json({ error: "token missing or invalid" });
+    }
+
+    if (blog.user.toString() === user.id.toString()) {
+      await Blog.findByIdAndRemove(request.params.id);
+      response.status(204).end();
+    } else {
+      return response.status(401).json({
+        error: "you do not have permission to delete this blog",
+      });
+    }
   }
-
-  const user = await User.findById(decodedToken.id);
-
-  if (blog.user.toString() === user.id.toString()) {
-    await Blog.findByIdAndRemove(request.params.id);
-    response.status(204).end();
-  } else {
-    return response.status(401).json({
-      error: "you do not have permission to delete this blog",
-    });
-  }
-});
+);
 
 // UPDATE A BLOG
 blogsRouter.put("/:id", async (request, response) => {
