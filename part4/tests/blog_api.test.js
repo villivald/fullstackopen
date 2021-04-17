@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const helper = require("./test_helper");
 const app = require("../app");
 const api = supertest(app);
 
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 // BEFORE EACH
 beforeEach(async () => {
@@ -79,6 +82,19 @@ describe("viewing a specific blog", () => {
 });
 
 describe("addition of a new blog", () => {
+  let token = null;
+  beforeAll(async () => {
+    await User.deleteMany({});
+
+    const testUser = await new User({
+      username: "Vladimir Lenin",
+      passwordHash: await bcrypt.hash("karlmarxrules", 10),
+    }).save();
+
+    const userForToken = { username: "Vladimir Lenin", id: testUser.id };
+    token = jwt.sign(userForToken, process.env.SECRET);
+    return token;
+  });
   // CAN ADD A NEW BLOG
   test("a valid blog can be added", async () => {
     const newBlog = {
@@ -91,6 +107,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -114,6 +131,7 @@ describe("addition of a new blog", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .send(newBlog)
       .expect(200)
       .expect("Content-Type", /application\/json/);
@@ -132,14 +150,22 @@ describe("addition of a new blog", () => {
       userId: "60744525b0fc3bc68325e172",
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(400);
   });
 
   // BLOG WITHOUT CONTENT -> 400
   test("blog without content is not added", async () => {
     const newBlog = { userId: "60744525b0fc3bc68325e172" };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(400);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
@@ -147,15 +173,46 @@ describe("addition of a new blog", () => {
 });
 
 describe("deletion of a blog", () => {
+  let token = null;
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    await User.deleteMany({});
+
+    const testUser = await new User({
+      username: "Vladimir Lenin",
+      passwordHash: await bcrypt.hash("karlmarxrules", 10),
+    }).save();
+
+    const userForToken = { username: "Vladimir Lenin", id: testUser.id };
+    token = jwt.sign(userForToken, process.env.SECRET);
+
+    const newBlog = {
+      title: "New Test Blog",
+      author: "Vladimir Lenin",
+      url: "villivald.com",
+    };
+
+    await api
+      .post("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
+      .send(newBlog)
+      .expect(200);
+
+    return token;
+  });
+
   // CAN DELETE A BLOG
   test("a blog can be deleted", async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect(204);
     const blogsAtEnd = await helper.blogsInDb();
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+    expect(blogsAtEnd).toHaveLength(0);
 
     const contents = blogsAtEnd.map((r) => r.title);
 
