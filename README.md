@@ -11,3 +11,6 @@
 [Part 3](https://github.com/villivald/fullstackopen2021-part3)
 
 [Part 4](https://github.com/villivald/fullstackopen2021/tree/main/part4/)
+
+[Part 5](https://github.com/villivald/fullstackopen2021/tree/main/part5/)
+
