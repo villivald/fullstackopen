@@ -6,7 +6,9 @@ import loginService from "./services/login";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newBlog, setNewBlog] = useState("");
+  const [newBlogTitle, setNewBlogTitle] = useState("");
+  const [newBlogAuthor, setNewBlogAuthor] = useState("");
+  const [newBlogUrl, setNewBlogUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
 
   const [username, setUsername] = useState("");
@@ -32,20 +34,30 @@ const App = () => {
   const addBlog = (event) => {
     event.preventDefault();
     const blogObject = {
-      title: newBlog,
-      author: user.name,
-      url: "google.com",
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl,
     };
 
     blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog));
-      setNewBlog("");
+      setNewBlogTitle("");
+      setNewBlogAuthor("");
+      setNewBlogUrl("");
     });
   };
 
-  const handleBlogChange = (event) => {
+  const handleTitleChange = (event) => {
     console.log(event.target.value);
-    setNewBlog(event.target.value);
+    setNewBlogTitle(event.target.value);
+  };
+  const handleAuthorChange = (event) => {
+    console.log(event.target.value);
+    setNewBlogAuthor(event.target.value);
+  };
+  const handleUrlChange = (event) => {
+    console.log(event.target.value);
+    setNewBlogUrl(event.target.value);
   };
 
   const handleLogin = async (event) => {
@@ -104,8 +116,16 @@ const App = () => {
         <button onClick={handleLogout}>Logout</button>
       </div>
       <form onSubmit={addBlog}>
-        <input value={newBlog} onChange={handleBlogChange} />
-        <button type="submit">Save</button>
+        <p>
+          Title: <input value={newBlogTitle} onChange={handleTitleChange} />
+        </p>
+        <p>
+          Author: <input value={newBlogAuthor} onChange={handleAuthorChange} />
+        </p>
+        <p>
+          Url: <input value={newBlogUrl} onChange={handleUrlChange} />
+        </p>
+        <button type="submit">Create</button>
       </form>
     </>
   );
