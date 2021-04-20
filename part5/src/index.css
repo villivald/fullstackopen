@@ -1,0 +1,18 @@
+h1 {
+  color: green;
+  font-style: italic;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.log {
+  margin-bottom: 15px;
+}

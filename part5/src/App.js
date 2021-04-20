@@ -20,6 +20,15 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
   const addBlog = (event) => {
     event.preventDefault();
     const blogObject = {
@@ -46,6 +55,7 @@ const App = () => {
         username,
         password,
       });
+      window.localStorage.setItem("loggedBlogUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
       setUsername("");
@@ -58,10 +68,15 @@ const App = () => {
     }
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem("loggedBlogUser");
+    document.location.reload();
+  };
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
-        username
+        Username
         <input
           type="text"
           value={username}
@@ -70,7 +85,7 @@ const App = () => {
         />
       </div>
       <div>
-        password
+        Password
         <input
           type="password"
           value={password}
@@ -78,15 +93,21 @@ const App = () => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button type="submit">Login</button>
     </form>
   );
 
   const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <input value={newBlog} onChange={handleBlogChange} />
-      <button type="submit">save</button>
-    </form>
+    <>
+      <div className="log">
+        {user.username} is logged in
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+      <form onSubmit={addBlog}>
+        <input value={newBlog} onChange={handleBlogChange} />
+        <button type="submit">Save</button>
+      </form>
+    </>
   );
 
   return (
@@ -96,11 +117,8 @@ const App = () => {
       {user === null ? (
         loginForm()
       ) : (
-        <div>
-          <div>
-            <p>{user.username} logged in</p>
-            {blogForm()}
-          </div>
+        <>
+          {blogForm()}
           <ul>
             {blogs
               .filter((blog) => blog.user.username === user.username)
@@ -108,7 +126,7 @@ const App = () => {
                 <Blog key={blog.id} blog={blog} />
               ))}
           </ul>
-        </div>
+        </>
       )}
     </div>
   );
