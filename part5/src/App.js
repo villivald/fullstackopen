@@ -9,12 +9,15 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState("");
   const [newBlogAuthor, setNewBlogAuthor] = useState("");
   const [newBlogUrl, setNewBlogUrl] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [user, setUser] = useState(null);
+
+  const [toggle, setToggle] = useState(false);
+  const [notificationText, setNotificationText] = useState("");
+  const [notificationStyle, setNotificationStyle] = useState("notification");
 
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
@@ -33,18 +36,40 @@ const App = () => {
 
   const addBlog = (event) => {
     event.preventDefault();
+
     const blogObject = {
       title: newBlogTitle,
       author: newBlogAuthor,
       url: newBlogUrl,
     };
+    if (
+      blogObject.title !== "" &&
+      blogObject.author !== "" &&
+      blogObject.url !== ""
+    ) {
+      blogService.create(blogObject).then((returnedBlog) => {
+        setBlogs(blogs.concat(returnedBlog));
+        setNewBlogTitle("");
+        setNewBlogAuthor("");
+        setNewBlogUrl("");
+      });
 
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog));
-      setNewBlogTitle("");
-      setNewBlogAuthor("");
-      setNewBlogUrl("");
-    });
+      setNotificationStyle("notification");
+      setNotificationText(
+        `A new blog ${blogObject.title} by ${blogObject.author} added`
+      );
+      setToggle(!toggle);
+      setTimeout(() => {
+        setToggle(false);
+      }, 5000);
+    } else {
+      setNotificationStyle("warning");
+      setNotificationText("You must fill all fields in order to add a blog");
+      setToggle(!toggle);
+      setTimeout(() => {
+        setToggle(false);
+      }, 5000);
+    }
   };
 
   const handleTitleChange = (event) => {
@@ -72,10 +97,18 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-    } catch (exception) {
-      setErrorMessage("wrong credentials");
+      setNotificationStyle("notification");
+      setNotificationText(`User ${user.username} is logged in`);
+      setToggle(!toggle);
       setTimeout(() => {
-        setErrorMessage(null);
+        setToggle(false);
+      }, 5000);
+    } catch (exception) {
+      setNotificationStyle("warning");
+      setNotificationText("Wrong username or password");
+      setToggle(!toggle);
+      setTimeout(() => {
+        setToggle(false);
       }, 5000);
     }
   };
@@ -133,7 +166,9 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      <Notification message={errorMessage} />
+      {toggle && (
+        <Notification text={notificationText} style={notificationStyle} />
+      )}
       {user === null ? (
         loginForm()
       ) : (
