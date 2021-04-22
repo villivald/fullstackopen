@@ -3,6 +3,9 @@ import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import LoginForm from "./components/LoginForm";
+import BlogForm from "./components/BlogForm";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -119,53 +122,40 @@ const App = () => {
   };
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        Username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        Password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">Login</button>
-    </form>
+    <Togglable buttonLabel="Log in">
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleLogin}
+      />
+    </Togglable>
   );
 
   const blogForm = () => (
-    <>
-      <div className="log">
-        {user.username} is logged in
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-      <form onSubmit={addBlog}>
-        <p>
-          Title: <input value={newBlogTitle} onChange={handleTitleChange} />
-        </p>
-        <p>
-          Author: <input value={newBlogAuthor} onChange={handleAuthorChange} />
-        </p>
-        <p>
-          Url: <input value={newBlogUrl} onChange={handleUrlChange} />
-        </p>
-        <button type="submit">Create</button>
-      </form>
-    </>
+    <Togglable buttonLabel="New blog">
+      <BlogForm
+        onSubmit={addBlog}
+        newBlogTitle={newBlogTitle}
+        handleTitleChange={handleTitleChange}
+        newBlogAuthor={newBlogAuthor}
+        handleAuthorChange={handleAuthorChange}
+        newBlogUrl={newBlogUrl}
+        handleUrlChange={handleUrlChange}
+      />
+    </Togglable>
   );
 
   return (
     <div>
       <h1>Blogs</h1>
+      {user && (
+        <div className="log">
+          {user.username} is logged in
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
       {toggle && (
         <Notification text={notificationText} style={notificationStyle} />
       )}
