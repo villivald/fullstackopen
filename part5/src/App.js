@@ -162,6 +162,7 @@ const App = () => {
           {blogForm()}
           <div>
             {blogs
+              .sort((min, max) => max.likes - min.likes)
               .filter((blog) => blog.user.username === user.username)
               .map((blog) => (
                 <Blog key={blog.id} blog={blog} blogUpdate={blogUpdate} />
