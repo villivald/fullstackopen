@@ -9,10 +9,6 @@ import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [newBlogTitle, setNewBlogTitle] = useState("");
-  const [newBlogAuthor, setNewBlogAuthor] = useState("");
-  const [newBlogUrl, setNewBlogUrl] = useState("");
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -22,6 +18,7 @@ const App = () => {
   const [notificationText, setNotificationText] = useState("");
   const [notificationStyle, setNotificationStyle] = useState("notification");
 
+  // EFFECTS
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
       setBlogs(initialBlogs);
@@ -37,14 +34,8 @@ const App = () => {
     }
   }, []);
 
-  const addBlog = (event) => {
-    event.preventDefault();
-
-    const blogObject = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-    };
+  // ADDING BLOG OBJECT
+  const addBlog = (blogObject) => {
     if (
       blogObject.title !== "" &&
       blogObject.author !== "" &&
@@ -52,9 +43,6 @@ const App = () => {
     ) {
       blogService.create(blogObject).then((returnedBlog) => {
         setBlogs(blogs.concat(returnedBlog));
-        setNewBlogTitle("");
-        setNewBlogAuthor("");
-        setNewBlogUrl("");
       });
 
       setNotificationStyle("notification");
@@ -73,19 +61,6 @@ const App = () => {
         setToggle(false);
       }, 5000);
     }
-  };
-
-  const handleTitleChange = (event) => {
-    console.log(event.target.value);
-    setNewBlogTitle(event.target.value);
-  };
-  const handleAuthorChange = (event) => {
-    console.log(event.target.value);
-    setNewBlogAuthor(event.target.value);
-  };
-  const handleUrlChange = (event) => {
-    console.log(event.target.value);
-    setNewBlogUrl(event.target.value);
   };
 
   const handleLogin = async (event) => {
@@ -135,15 +110,7 @@ const App = () => {
 
   const blogForm = () => (
     <Togglable buttonLabel="New blog">
-      <BlogForm
-        onSubmit={addBlog}
-        newBlogTitle={newBlogTitle}
-        handleTitleChange={handleTitleChange}
-        newBlogAuthor={newBlogAuthor}
-        handleAuthorChange={handleAuthorChange}
-        newBlogUrl={newBlogUrl}
-        handleUrlChange={handleUrlChange}
-      />
+      <BlogForm createBlog={addBlog} />
     </Togglable>
   );
 
