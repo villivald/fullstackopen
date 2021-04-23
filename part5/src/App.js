@@ -20,12 +20,23 @@ const App = () => {
 
   const blogFormRef = useRef();
 
+  const [updatedBlogs, setUpdatedBlogs] = useState(false);
+
   // EFFECTS
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
       setBlogs(initialBlogs);
     });
   }, []);
+
+  useEffect(() => {
+    updatedBlogs &&
+      blogService.getAll().then((blogs) => {
+        setBlogs(blogs);
+        console.log("Blog was updated");
+      });
+    setUpdatedBlogs(false);
+  }, [updatedBlogs]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogUser");
@@ -122,6 +133,16 @@ const App = () => {
     </Togglable>
   );
 
+  const blogUpdate = async (blogId, blogObject) => {
+    await blogService.update(blogId, blogObject);
+
+    const updatedBlog = { ...blogObject, blogId };
+
+    setBlogs(
+      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+    );
+  };
+
   return (
     <div>
       <h1>Blogs</h1>
@@ -139,13 +160,13 @@ const App = () => {
       ) : (
         <>
           {blogForm()}
-          <p>
+          <div>
             {blogs
               .filter((blog) => blog.user.username === user.username)
               .map((blog) => (
-                <Blog key={blog.id} blog={blog} />
+                <Blog key={blog.id} blog={blog} blogUpdate={blogUpdate} />
               ))}
-          </p>
+          </div>
         </>
       )}
     </div>
