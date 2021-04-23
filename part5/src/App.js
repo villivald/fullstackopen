@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
@@ -18,6 +18,8 @@ const App = () => {
   const [notificationText, setNotificationText] = useState("");
   const [notificationStyle, setNotificationStyle] = useState("notification");
 
+  const blogFormRef = useRef();
+
   // EFFECTS
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
@@ -36,6 +38,7 @@ const App = () => {
 
   // ADDING BLOG OBJECT
   const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility();
     if (
       blogObject.title !== "" &&
       blogObject.author !== "" &&
@@ -63,6 +66,7 @@ const App = () => {
     }
   };
 
+  // LOG IN & OUT
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -97,7 +101,7 @@ const App = () => {
   };
 
   const loginForm = () => (
-    <Togglable buttonLabel="Log in">
+    <Togglable buttonLabel="Log in" cancelButtonLabel="Cancel">
       <LoginForm
         username={username}
         password={password}
@@ -109,7 +113,11 @@ const App = () => {
   );
 
   const blogForm = () => (
-    <Togglable buttonLabel="New blog">
+    <Togglable
+      buttonLabel="New blog"
+      cancelButtonLabel="Cancel"
+      ref={blogFormRef}
+    >
       <BlogForm createBlog={addBlog} />
     </Togglable>
   );
@@ -131,13 +139,13 @@ const App = () => {
       ) : (
         <>
           {blogForm()}
-          <ul>
+          <p>
             {blogs
               .filter((blog) => blog.user.username === user.username)
               .map((blog) => (
                 <Blog key={blog.id} blog={blog} />
               ))}
-          </ul>
+          </p>
         </>
       )}
     </div>
