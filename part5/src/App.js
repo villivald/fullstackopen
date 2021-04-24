@@ -143,6 +143,12 @@ const App = () => {
     );
   };
 
+  const blogRemove = async (blogId) => {
+    await blogService.remove(blogId);
+
+    setBlogs(blogs.filter((blog) => blog.id !== blogId));
+  };
+
   return (
     <div>
       <h1>Blogs</h1>
@@ -165,7 +171,12 @@ const App = () => {
               .sort((min, max) => max.likes - min.likes)
               .filter((blog) => blog.user.username === user.username)
               .map((blog) => (
-                <Blog key={blog.id} blog={blog} blogUpdate={blogUpdate} />
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  blogUpdate={blogUpdate}
+                  blogRemove={blogRemove}
+                />
               ))}
           </div>
         </>

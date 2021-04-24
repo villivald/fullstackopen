@@ -1,10 +1,14 @@
 import React from "react";
 import Togglable from "./Togglable";
 
-const Blog = ({ blog, blogUpdate }) => {
+const Blog = ({ blog, blogUpdate, blogRemove }) => {
   const likeHandler = () => {
     const updatedBlog = { ...blog, likes: blog.likes + 1 };
     blogUpdate(blog.id, updatedBlog);
+  };
+  const removeHandler = () => {
+    window.confirm(`Delete ${blog.title} by ${blog.author}?`) &&
+      blogRemove(blog.id);
   };
 
   return (
@@ -13,6 +17,7 @@ const Blog = ({ blog, blogUpdate }) => {
         border: "1px solid black",
         width: "250px",
         marginBottom: "10px",
+        marginTop: "5px",
         borderRadius: "5px",
         padding: "5px",
       }}
@@ -29,6 +34,7 @@ const Blog = ({ blog, blogUpdate }) => {
           <button onClick={likeHandler}>Like</button>
         </p>
         <p>User: {blog.user.username}</p>
+        <button onClick={removeHandler}>Remove</button>
       </Togglable>
     </div>
   );
