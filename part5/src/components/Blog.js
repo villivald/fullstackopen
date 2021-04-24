@@ -12,16 +12,7 @@ const Blog = ({ blog, blogUpdate, blogRemove }) => {
   };
 
   return (
-    <div
-      style={{
-        border: "1px solid black",
-        width: "250px",
-        marginBottom: "10px",
-        marginTop: "5px",
-        borderRadius: "5px",
-        padding: "5px",
-      }}
-    >
+    <div className="blog-container">
       <div>
         <strong>{blog.title} </strong>
         by

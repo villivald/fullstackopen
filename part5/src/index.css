@@ -22,7 +22,17 @@
   border-radius: 4px;
   margin-bottom: 2%;
 }
+
 .warning {
   color: red;
-  border: 1px solid red;
+  border-color: red;
+}
+
+.blog-container {
+  border: 1px solid black;
+  width: 250px;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  padding: 5px;
 }

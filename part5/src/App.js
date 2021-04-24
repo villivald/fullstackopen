@@ -20,23 +20,12 @@ const App = () => {
 
   const blogFormRef = useRef();
 
-  const [updatedBlogs, setUpdatedBlogs] = useState(false);
-
   // EFFECTS
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => {
       setBlogs(initialBlogs);
     });
   }, []);
-
-  useEffect(() => {
-    updatedBlogs &&
-      blogService.getAll().then((blogs) => {
-        setBlogs(blogs);
-        console.log("Blog was updated");
-      });
-    setUpdatedBlogs(false);
-  }, [updatedBlogs]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogUser");
