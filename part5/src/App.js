@@ -22,9 +22,11 @@ const App = () => {
 
   // EFFECTS
   useEffect(() => {
-    blogService.getAll().then((initialBlogs) => {
+    const fetchData = async () => {
+      const initialBlogs = await blogService.getAll();
       setBlogs(initialBlogs);
-    });
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -37,16 +39,15 @@ const App = () => {
   }, []);
 
   // ADDING BLOG OBJECT
-  const addBlog = (blogObject) => {
+  const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility();
     if (
       blogObject.title !== "" &&
       blogObject.author !== "" &&
       blogObject.url !== ""
     ) {
-      blogService.create(blogObject).then((returnedBlog) => {
-        setBlogs(blogs.concat(returnedBlog));
-      });
+      const newBlog = await blogService.create(blogObject);
+      setBlogs(blogs.concat(newBlog));
 
       setNotificationStyle("notification");
       setNotificationText(
@@ -64,6 +65,24 @@ const App = () => {
         setToggle(false);
       }, 5000);
     }
+  };
+
+  // UPDATE BLOG
+  const blogUpdate = async (blogId, blogObject) => {
+    await blogService.update(blogId, blogObject);
+
+    const updatedBlog = { ...blogObject, blogId };
+
+    setBlogs(
+      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+    );
+  };
+
+  // REMOVE BLOG
+  const blogRemove = async (blogId) => {
+    await blogService.remove(blogId);
+
+    setBlogs(blogs.filter((blog) => blog.id !== blogId));
   };
 
   // LOG IN & OUT
@@ -100,6 +119,7 @@ const App = () => {
     document.location.reload();
   };
 
+  // FORMS
   const loginForm = () => (
     <Togglable buttonLabel="Log in" cancelButtonLabel="Cancel">
       <LoginForm
@@ -121,22 +141,6 @@ const App = () => {
       <BlogForm createBlog={addBlog} />
     </Togglable>
   );
-
-  const blogUpdate = async (blogId, blogObject) => {
-    await blogService.update(blogId, blogObject);
-
-    const updatedBlog = { ...blogObject, blogId };
-
-    setBlogs(
-      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-    );
-  };
-
-  const blogRemove = async (blogId) => {
-    await blogService.remove(blogId);
-
-    setBlogs(blogs.filter((blog) => blog.id !== blogId));
-  };
 
   return (
     <div>
