@@ -18,6 +18,7 @@ const Blog = ({ blog, blogUpdate, blogRemove }) => {
         by
         <strong> {blog.author}</strong>
       </div>
+
       <Togglable buttonLabel="View" cancelButtonLabel="Hide">
         <p>Url: {blog.url}</p>
         <p>
