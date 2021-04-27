@@ -4,9 +4,9 @@ import "@testing-library/jest-dom/extend-expect";
 import BlogForm from "./BlogForm";
 
 test("<BlogForm /> updates parent state and calls onSubmit", () => {
-  const createBlog = jest.fn();
+  const createBlogMockHandler = jest.fn();
 
-  const component = render(<BlogForm createBlog={createBlog} />);
+  const component = render(<BlogForm createBlog={createBlogMockHandler} />);
 
   const titleInput = component.container.querySelector(".titleInput");
   const authorInput = component.container.querySelector(".authorInput");
@@ -24,6 +24,8 @@ test("<BlogForm /> updates parent state and calls onSubmit", () => {
   });
   fireEvent.submit(form);
 
-  expect(createBlog.mock.calls).toHaveLength(1);
-  expect(createBlog.mock.calls[0][0].title).toBe("SuperBlogi");
+  expect(createBlogMockHandler.mock.calls).toHaveLength(1);
+  expect(createBlogMockHandler.mock.calls[0][0].title).toBe("SuperBlogi");
+  expect(createBlogMockHandler.mock.calls[0][0].author).toBe("Jorma");
+  expect(createBlogMockHandler.mock.calls[0][0].url).toBe("http://jorma.com");
 });
