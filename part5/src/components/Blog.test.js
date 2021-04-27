@@ -5,7 +5,7 @@ import { render, fireEvent } from "@testing-library/react";
 import Blog from "./Blog";
 
 describe("Testing Blog component", () => {
-  const blog = {
+  const testBlog = {
     title: "The Doors",
     author: "Jim Morrison",
     url: "http://google.com",
@@ -17,8 +17,10 @@ describe("Testing Blog component", () => {
   };
 
   let component;
+  const likeMockHandler = jest.fn();
+
   beforeEach(() => {
-    component = render(<Blog blog={blog} />);
+    component = render(<Blog blog={testBlog} blogUpdate={likeMockHandler} />);
   });
 
   test("renders content", () => {
@@ -42,8 +44,8 @@ describe("Testing Blog component", () => {
   });
 
   test("renders blogs title and author, but not likes and url", () => {
-    expect(component.container).toHaveTextContent(blog.title);
-    expect(component.container).toHaveTextContent(blog.author);
+    expect(component.container).toHaveTextContent(testBlog.title);
+    expect(component.container).toHaveTextContent(testBlog.author);
 
     const contentHiddenByDefault = component.container.querySelector(
       ".hiddenByDefault"
@@ -62,7 +64,18 @@ describe("Testing Blog component", () => {
     expect(contentHiddenByDefault).not.toHaveStyle("display: none");
     expect(contentHiddenByDefault).toBeVisible();
 
-    expect(contentHiddenByDefault).toHaveTextContent(blog.likes);
-    expect(contentHiddenByDefault).toHaveTextContent(blog.url);
+    expect(contentHiddenByDefault).toHaveTextContent(testBlog.likes);
+    expect(contentHiddenByDefault).toHaveTextContent(testBlog.url);
+  });
+
+  test("if the Like button is clicked twice, the event handler is also called twice", () => {
+    const viewButton = component.getByText("View");
+    fireEvent.click(viewButton);
+
+    const likeButton = component.getByText("Like");
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
+
+    expect(likeMockHandler.mock.calls).toHaveLength(2);
   });
 });
