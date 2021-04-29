@@ -147,7 +147,7 @@ const App = () => {
       <h1>Blogs</h1>
       {user && (
         <div className="log">
-          {user.username} is logged in
+          {user.name} is logged in
           <button onClick={handleLogout}>Logout</button>
         </div>
       )}
