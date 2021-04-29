@@ -37,8 +37,10 @@ describe("Note app", function () {
       cy.get("#username").type("uncledrew");
       cy.get("#password").type("biggysmalls");
       cy.get("#login-button").click();
-      cy.contains("Wrong username or password");
-      cy.get(".warning").should("have.css", "border-color", "rgb(255, 0, 0)");
+      cy.get(".warning")
+        .should("contain", "Wrong username or password")
+        .and("have.css", "border-color", "rgb(255, 0, 0)");
+      cy.get("html").should("not.contain", "Lebron James is logged in");
     });
   });
 
@@ -50,13 +52,13 @@ describe("Note app", function () {
       cy.get("#login-button").click();
     });
 
-    it("a new note can be created", function () {
+    it("a new blog can be created", function () {
       cy.contains("New blog").click();
       cy.get("#titleInput").type("Cypress");
       cy.get("#authorInput").type("Mr. C.Y. Press");
       cy.get("#urlInput").type("cypress.com");
       cy.get("#newBlogButton").click();
-      cy.contains("Cypress");
+      cy.get("html").should("contain", "Cypress by Mr. C.Y. Press");
     });
   });
 });
