@@ -72,7 +72,27 @@ describe("Note app", function () {
         cy.contains("Cypress Test Blog");
         cy.contains("View").click();
         cy.get(".likeButton").click();
-        cy.get(".likeContainer").contains("1");
+        cy.get(".likeContainer").contains("1 like");
+        cy.get(".likeButton").click();
+        cy.get(".likeContainer").contains("2 likes");
+      });
+    });
+
+    describe("blog can be created", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "Cypress Test Blog",
+          author: "Tester MC",
+          url: "test.com",
+          likes: 0,
+        });
+      });
+
+      it("and deleted by creator", function () {
+        cy.contains("Cypress Test Blog");
+        cy.contains("View").click();
+        cy.contains("Remove").click();
+        cy.get("html").should("not.contain", "Cypress Test Blog");
       });
     });
   });
