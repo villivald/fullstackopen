@@ -21,9 +21,11 @@ const Blog = ({ blog, blogUpdate, blogRemove }) => {
 
       <Togglable buttonLabel="View" cancelButtonLabel="Hide">
         <p>Url: {blog.url}</p>
-        <p>
+        <p className="likeContainer">
           {blog.likes === 1 ? `${blog.likes} like` : `${blog.likes} likes`}
-          <button onClick={likeHandler}>Like</button>
+          <button className="likeButton" onClick={likeHandler}>
+            Like
+          </button>
         </p>
         <p>User: {blog.user.username}</p>
         <button onClick={removeHandler}>Remove</button>

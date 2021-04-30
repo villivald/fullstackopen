@@ -46,10 +46,7 @@ describe("Note app", function () {
 
   describe("When logged in", function () {
     beforeEach(function () {
-      cy.contains("Log in").click();
-      cy.get("#username").type("theking");
-      cy.get("#password").type("lalakers");
-      cy.get("#login-button").click();
+      cy.login({ username: "theking", password: "lalakers" });
     });
 
     it("a new blog can be created", function () {
@@ -59,6 +56,24 @@ describe("Note app", function () {
       cy.get("#urlInput").type("cypress.com");
       cy.get("#newBlogButton").click();
       cy.get("html").should("contain", "Cypress by Mr. C.Y. Press");
+    });
+
+    describe("and a blog exists", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "Cypress Test Blog",
+          author: "Tester MC",
+          url: "test.com",
+          likes: 0,
+        });
+      });
+
+      it("it can be liked", function () {
+        cy.contains("Cypress Test Blog");
+        cy.contains("View").click();
+        cy.get(".likeButton").click();
+        cy.get(".likeContainer").contains("1");
+      });
     });
   });
 });
