@@ -1,4 +1,4 @@
-describe("Note app", function () {
+describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
     const user = {
@@ -93,6 +93,37 @@ describe("Note app", function () {
         cy.contains("View").click();
         cy.contains("Remove").click();
         cy.get("html").should("not.contain", "Cypress Test Blog");
+      });
+    });
+
+    describe("several blogs can be created", function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: "Blog with 1 like",
+          author: "Tester 1",
+          url: "test.com3",
+          likes: 1,
+        });
+        cy.createBlog({
+          title: "Blog with 15 likes",
+          author: "Tester 2",
+          url: "test.com2",
+          likes: 15,
+        });
+        cy.createBlog({
+          title: "Blog with 6 likes",
+          author: "Tester 3",
+          url: "test.com1",
+          likes: 6,
+        });
+      });
+
+      it("and they are automatically sorted by likes", function () {
+        cy.get(".blog-container>.blogTitle").should((items) => {
+          expect(items[0]).to.contain("Blog with 15 likes");
+          expect(items[1]).to.contain("Blog with 6 likes");
+          expect(items[2]).to.contain("Blog with 1 like");
+        });
       });
     });
   });

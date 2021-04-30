@@ -13,7 +13,7 @@ const Blog = ({ blog, blogUpdate, blogRemove }) => {
 
   return (
     <div className="blog-container">
-      <div>
+      <div className="blogTitle">
         <strong>{blog.title} </strong>
         by
         <strong> {blog.author}</strong>
