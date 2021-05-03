@@ -29,10 +29,8 @@ const App = () => {
           <div key={anecdote.id} className="anecdote">
             <div>{anecdote.content}</div>
             <div>
-              <div>
-                Has <strong>{anecdote.votes}</strong>{" "}
-                {anecdote.votes === 1 ? "vote" : "votes"}
-              </div>
+              Has <strong>{anecdote.votes}</strong>{" "}
+              {anecdote.votes === 1 ? "vote" : "votes"}{" "}
               <button onClick={() => vote(anecdote.id)}>Vote</button>
             </div>
           </div>
