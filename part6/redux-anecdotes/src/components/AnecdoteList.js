@@ -8,8 +8,14 @@ import {
 import Filter from "./Filter";
 
 const AnecdoteList = () => {
-  let anecdotes = useSelector((state) => state.anecdotes);
   const filter = useSelector((state) => state.filter);
+  const anecdotes = useSelector((state) =>
+    filter
+      ? state.anecdotes.filter((anecdote) =>
+          anecdote.content.toLowerCase().includes(filter.toLowerCase())
+        )
+      : state.anecdotes
+  );
   const dispatch = useDispatch();
 
   const vote = (id) => {
@@ -31,11 +37,6 @@ const AnecdoteList = () => {
       </div>
     );
   };
-
-  filter &&
-    (anecdotes = anecdotes.filter((anecdote) =>
-      anecdote.content.toLowerCase().includes(filter.toLowerCase())
-    ));
 
   return (
     <div>
