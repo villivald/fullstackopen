@@ -5,9 +5,11 @@ import {
   showNotification,
   hideNotification,
 } from "../reducers/notificationReducer";
+import Filter from "./Filter";
 
 const AnecdoteList = () => {
-  const anecdotes = useSelector((state) => state.anecdotes);
+  let anecdotes = useSelector((state) => state.anecdotes);
+  const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
 
   const vote = (id) => {
@@ -30,8 +32,14 @@ const AnecdoteList = () => {
     );
   };
 
+  filter &&
+    (anecdotes = anecdotes.filter((anecdote) =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase())
+    ));
+
   return (
     <div>
+      <Filter />
       {anecdotes
         .sort((min, max) => max.votes - min.votes)
         .map((anecdote) => (
