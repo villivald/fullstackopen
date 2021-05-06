@@ -24,10 +24,15 @@ const reducer = (state = [], action) => {
   }
 };
 
-export const createAnecdote = (data) => ({
-  type: "NEW",
-  data,
-});
+export const createAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.createNew(content);
+    dispatch({
+      type: "NEW",
+      data: newAnecdote,
+    });
+  };
+};
 
 export const voteForAnecdote = (id) => {
   return {
