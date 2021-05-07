@@ -1,9 +1,14 @@
-export const showNotification = (notificationText) => ({
-  type: "SHOW",
-  data: notificationText,
-});
+export const showNotification = (notificationText, time) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "SHOW",
+      data: notificationText,
+      time: setTimeout(() => dispatch(hideNotification()), time * 1000),
+    });
+  };
+};
 
-export const hideNotification = () => ({
+const hideNotification = () => ({
   type: "HIDE",
 });
 
