@@ -3,14 +3,17 @@ import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import registrationService from "./services/registration";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
+import RegistrationForm from "./components/RegistrationForm";
 import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const [user, setUser] = useState(null);
 
@@ -119,6 +122,23 @@ const App = () => {
     document.location.reload();
   };
 
+  const handleRegistration = async (event) => {
+    event.preventDefault();
+    const newUser = await registrationService.register({
+      name,
+      username,
+      password,
+    });
+    setNotificationStyle("notification");
+    setNotificationText(
+      `User ${newUser.username} was succesfully registered. Now you can log in.`
+    );
+    setToggle(!toggle);
+    setTimeout(() => {
+      setToggle(false);
+    }, 10000);
+  };
+
   // FORMS
   const loginForm = () => (
     <Togglable buttonLabel="Log in" cancelButtonLabel="Cancel">
@@ -142,6 +162,20 @@ const App = () => {
     </Togglable>
   );
 
+  const registrationForm = () => (
+    <Togglable buttonLabel="Register" cancelButtonLabel="Cancel">
+      <RegistrationForm
+        name={name}
+        username={username}
+        password={password}
+        handleNameChange={({ target }) => setName(target.value)}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleRegistration}
+      />
+    </Togglable>
+  );
+
   return (
     <div>
       <h1>Blogs</h1>
@@ -154,6 +188,7 @@ const App = () => {
       {toggle && (
         <Notification text={notificationText} style={notificationStyle} />
       )}
+      {!user && registrationForm()}
       {user === null ? (
         loginForm()
       ) : (
