@@ -1,10 +1,16 @@
 export const showNotification = (notificationText, time) => {
+  window.clearTimeout(window.timeout);
+
   return async (dispatch) => {
     dispatch({
       type: "SHOW",
       data: notificationText,
-      time: setTimeout(() => dispatch(hideNotification()), time * 1000),
     });
+
+    window.timeout = setTimeout(
+      () => dispatch(hideNotification()),
+      time * 1000
+    );
   };
 };
 
