@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 import Menu from "./components/Menu";
 import AnecdoteList from "./components/AnecdoteList";
@@ -26,13 +26,20 @@ const App = () => {
     },
   ]);
 
+  // const [notification, setNotification] = useState("");
+
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
   };
 
+  const match = useRouteMatch("/:id");
+  const anecdote = match
+    ? anecdotes.find((anecdote) => anecdote.id === match.params.id)
+    : null;
+
   return (
-    <Router>
+    <>
       <Menu />
 
       <Switch>
@@ -43,7 +50,7 @@ const App = () => {
           <CreateNew addNew={addNew} />
         </Route>
         <Route path="/:id">
-          <Anecdote anecdotes={anecdotes} />
+          <Anecdote anecdote={anecdote} />
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
@@ -51,7 +58,7 @@ const App = () => {
       </Switch>
 
       <Footer />
-    </Router>
+    </>
   );
 };
 
