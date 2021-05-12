@@ -26,11 +26,15 @@ const App = () => {
     },
   ]);
 
-  // const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState(null);
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
+    setNotification(
+      `A new anecdote ${anecdote.content} is succesfully created.`
+    );
+    setTimeout(() => setNotification(null), 10000);
   };
 
   const match = useRouteMatch("/:id");
@@ -41,7 +45,13 @@ const App = () => {
   return (
     <>
       <Menu />
-
+      {notification && (
+        <div
+          style={{ border: "1px dashed tomato", margin: "5px", padding: "5px" }}
+        >
+          {notification}
+        </div>
+      )}
       <Switch>
         <Route path="/about">
           <About />
