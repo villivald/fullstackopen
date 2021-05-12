@@ -29,12 +29,13 @@ const App = () => {
   const [notification, setNotification] = useState(null);
 
   const addNew = (anecdote) => {
+    window.clearTimeout(window.timeout);
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
     setNotification(
       `A new anecdote ${anecdote.content} is succesfully created.`
     );
-    setTimeout(() => setNotification(null), 10000);
+    window.timeout = setTimeout(() => setNotification(null), 10000);
   };
 
   const match = useRouteMatch("/:id");
