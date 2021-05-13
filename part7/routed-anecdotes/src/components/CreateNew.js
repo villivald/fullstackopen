@@ -40,12 +40,7 @@ const CreateNew = (props) => {
             marginBottom: "10px",
           }}
         >
-          Content:{" "}
-          <input
-            type={content.type}
-            value={content.value}
-            onChange={content.onChange}
-          />
+          Content: <input {...content} />
         </div>
         <div
           style={{
@@ -56,12 +51,7 @@ const CreateNew = (props) => {
             marginBottom: "10px",
           }}
         >
-          Author:{" "}
-          <input
-            type={author.type}
-            value={author.value}
-            onChange={author.onChange}
-          />
+          Author: <input {...author} />
         </div>
         <div
           style={{
@@ -72,8 +62,7 @@ const CreateNew = (props) => {
             marginBottom: "10px",
           }}
         >
-          Url:{" "}
-          <input type={info.type} value={info.value} onChange={info.onChange} />
+          Url: <input {...info} />
         </div>
         <div style={{ display: "flex", marginBottom: "10px", gap: "10px" }}>
           <button type="submit">Create</button>
