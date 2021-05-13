@@ -5,12 +5,13 @@ import { useField } from "../hooks/index";
 const CreateNew = (props) => {
   const history = useHistory();
 
-  const content = useField("text");
-  const author = useField("text");
-  const info = useField("text");
+  const { resetValue: resetContent, ...content } = useField("text");
+  const { resetValue: resetAuthor, ...author } = useField("text");
+  const { resetValue: resetInfo, ...info } = useField("text");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     props.addNew({
       content: content.value,
       author: author.value,
@@ -18,6 +19,12 @@ const CreateNew = (props) => {
       votes: 0,
     });
     history.push("/");
+  };
+
+  const handleReset = () => {
+    resetContent("");
+    resetAuthor("");
+    resetInfo("");
   };
 
   return (
@@ -68,8 +75,12 @@ const CreateNew = (props) => {
           Url:{" "}
           <input type={info.type} value={info.value} onChange={info.onChange} />
         </div>
-
-        <button style={{ marginBottom: "10px" }}>Create</button>
+        <div style={{ display: "flex", marginBottom: "10px", gap: "10px" }}>
+          <button type="submit">Create</button>
+          <button type="button" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
       </form>
     </div>
   );
