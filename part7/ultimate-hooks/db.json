@@ -1,0 +1,38 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are grat",
+      "id": 1
+    },
+    {
+      "content": "the best featrure ever <3",
+      "id": 2
+    },
+    {
+      "content": "hello world",
+      "id": 3
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "kaltsoon",
+      "number": "045-2323456",
+      "id": 2
+    },
+    {
+      "name": "Mr Twister",
+      "number": "0406789856",
+      "id": 3
+    },
+    {
+      "name": "Jukka",
+      "number": "055-90056787",
+      "id": 4
+    }
+  ]
+}
