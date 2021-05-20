@@ -1,0 +1,11 @@
+POST https://evening-mesa-82321.herokuapp.com/api/books
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikt5cmllIElydmluZyIsImlkIjoiNjA3NDYxZmVlNTExYjY3MGExNTMwZmM1IiwiaWF0IjoxNjIxMjcyODk2LCJleHAiOjE2MjEyNzY0OTZ9.yFRQQmdzjERsMFwkVSZ3xE1ThCkItzrTRrbFfKiZ4FM
+
+{
+    "title": "Books",
+    "author": "KKKKK",
+    "url": "kkk.com",
+    "stars": 5,
+    "picture": "https://placekitten.com/80/100"
+}

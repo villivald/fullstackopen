@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/6074404642cdca6a05da4cf9
+Content-Type: application/json
+
+{
+    "title": "Updated Blog",
+    "author": "Upp D'ate Jr",
+    "url": "blog.com",
+    "likes": 60,
+    "userId": "60744e6604b5e06d09982d03"
+}

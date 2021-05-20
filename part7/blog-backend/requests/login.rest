@@ -1,0 +1,7 @@
+post https://evening-mesa-82321.herokuapp.com/api/login
+Content-Type: application/json
+
+{
+    "username": "Kyrie Irving",
+    "password": "lebronjames"
+}
