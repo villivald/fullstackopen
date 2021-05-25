@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Switch, Route } from "react-router-dom";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
@@ -8,6 +9,7 @@ import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import RegistrationForm from "./components/RegistrationForm";
 import Togglable from "./components/Togglable";
+import Users from "./components/Users";
 
 import { useDispatch } from "react-redux";
 import { showNotification } from "./reducers/notificationReducer";
@@ -177,41 +179,50 @@ const App = () => {
   );
 
   return (
-    <div>
+    <>
       <h1>Blogs</h1>
-
       {user && (
         <div className="log">
-          {user.name} is logged in
-          <button onClick={handleLogout}>Logout</button>
+          {user.username} is logged in
+          <button style={{ maxWidth: "60px" }} onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       )}
-
       <Notification />
-
       {!user && registrationForm()}
 
-      {user === null ? (
-        loginForm()
-      ) : (
-        <>
-          {blogForm()}
+      <Switch>
+        <Route path="/users">
+          <Users />
+        </Route>
+
+        <Route path="/">
           <div>
-            {blogs
-              .sort((min, max) => max.likes - min.likes)
-              .filter((blog) => blog.user.username === user.username)
-              .map((blog) => (
-                <Blog
-                  key={blog.id}
-                  blog={blog}
-                  blogUpdate={blogUpdate}
-                  blogRemove={blogRemove}
-                />
-              ))}
+            {user === null ? (
+              loginForm()
+            ) : (
+              <>
+                {blogForm()}
+                <div>
+                  {blogs
+                    .sort((min, max) => max.likes - min.likes)
+                    .filter((blog) => blog.user.username === user.username)
+                    .map((blog) => (
+                      <Blog
+                        key={blog.id}
+                        blog={blog}
+                        blogUpdate={blogUpdate}
+                        blogRemove={blogRemove}
+                      />
+                    ))}
+                </div>
+              </>
+            )}
           </div>
-        </>
-      )}
-    </div>
+        </Route>
+      </Switch>
+    </>
   );
 };
 
