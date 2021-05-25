@@ -9,6 +9,9 @@ import BlogForm from "./components/BlogForm";
 import RegistrationForm from "./components/RegistrationForm";
 import Togglable from "./components/Togglable";
 
+import { useDispatch } from "react-redux";
+import { showNotification } from "./reducers/notificationReducer";
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
@@ -16,10 +19,6 @@ const App = () => {
   const [name, setName] = useState("");
 
   const [user, setUser] = useState(null);
-
-  const [toggle, setToggle] = useState(false);
-  const [notificationText, setNotificationText] = useState("");
-  const [notificationStyle, setNotificationStyle] = useState("notification");
 
   const blogFormRef = useRef();
 
@@ -41,6 +40,8 @@ const App = () => {
     }
   }, []);
 
+  const dispatch = useDispatch();
+
   // ADDING BLOG OBJECT
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility();
@@ -52,21 +53,21 @@ const App = () => {
       const newBlog = await blogService.create(blogObject);
       setBlogs(blogs.concat(newBlog));
 
-      setNotificationStyle("notification");
-      setNotificationText(
-        `A new blog ${blogObject.title} by ${blogObject.author} added`
+      dispatch(
+        showNotification(
+          `A new blog ${blogObject.title} by ${blogObject.author} added`,
+          5,
+          "green"
+        )
       );
-      setToggle(!toggle);
-      setTimeout(() => {
-        setToggle(false);
-      }, 5000);
     } else {
-      setNotificationStyle("warning");
-      setNotificationText("You must fill all fields in order to add a blog");
-      setToggle(!toggle);
-      setTimeout(() => {
-        setToggle(false);
-      }, 5000);
+      dispatch(
+        showNotification(
+          "You must fill all fields in order to add a blog",
+          5,
+          "red"
+        )
+      );
     }
   };
 
@@ -84,8 +85,16 @@ const App = () => {
   // REMOVE BLOG
   const blogRemove = async (blogId) => {
     await blogService.remove(blogId);
-
+    const thisBlog = blogs.filter((blog) => blog.id === blogId);
     setBlogs(blogs.filter((blog) => blog.id !== blogId));
+
+    dispatch(
+      showNotification(
+        `Blog ${thisBlog[0].title} by ${thisBlog[0].author} was succesfully deleted`,
+        5,
+        "green"
+      )
+    );
   };
 
   // LOG IN & OUT
@@ -101,19 +110,11 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-      setNotificationStyle("notification");
-      setNotificationText(`User ${user.username} is logged in`);
-      setToggle(!toggle);
-      setTimeout(() => {
-        setToggle(false);
-      }, 5000);
+      dispatch(
+        showNotification(`User ${user.username} is logged in`, 5, "green")
+      );
     } catch (exception) {
-      setNotificationStyle("warning");
-      setNotificationText("Wrong username or password");
-      setToggle(!toggle);
-      setTimeout(() => {
-        setToggle(false);
-      }, 5000);
+      dispatch(showNotification("Wrong username or password", 5, "red"));
     }
   };
 
@@ -129,14 +130,13 @@ const App = () => {
       username,
       password,
     });
-    setNotificationStyle("notification");
-    setNotificationText(
-      `User ${newUser.username} was succesfully registered. Now you can log in.`
+    dispatch(
+      showNotification(
+        `User ${newUser.username} was succesfully registered. Now you can log in.`,
+        10,
+        "green"
+      )
     );
-    setToggle(!toggle);
-    setTimeout(() => {
-      setToggle(false);
-    }, 10000);
   };
 
   // FORMS
@@ -179,16 +179,18 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
+
       {user && (
         <div className="log">
           {user.name} is logged in
           <button onClick={handleLogout}>Logout</button>
         </div>
       )}
-      {toggle && (
-        <Notification text={notificationText} style={notificationStyle} />
-      )}
+
+      <Notification />
+
       {!user && registrationForm()}
+
       {user === null ? (
         loginForm()
       ) : (
