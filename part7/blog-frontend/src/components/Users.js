@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from "react";
-import userService from "../services/users";
+import React from "react";
+import { Link } from "react-router-dom";
 
-const Users = () => {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const initialUsers = await userService.getAll();
-      setUsers(initialUsers);
-    };
-    fetchData();
-  }, []);
-
+const Users = ({ users }) => {
   const userData = users.map((user) => (
     <div
       key={user.id}
@@ -20,7 +10,9 @@ const Users = () => {
         gridTemplateColumns: "1fr 3fr",
       }}
     >
-      <p>{user.username}</p>
+      <Link to={`/users/${user.id}`}>
+        <p>{user.username}</p>
+      </Link>
       <p>{user.blogs.length}</p>
     </div>
   ));

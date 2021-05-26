@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import userService from "./services/users";
 import registrationService from "./services/registration";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import RegistrationForm from "./components/RegistrationForm";
 import Togglable from "./components/Togglable";
 import Users from "./components/Users";
+import User from "./components/User";
 
 import { useDispatch } from "react-redux";
 import { showNotification } from "./reducers/notificationReducer";
@@ -23,6 +25,8 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   const blogFormRef = useRef();
+
+  const [users, setUsers] = useState([]);
 
   // EFFECTS
   useEffect(() => {
@@ -40,6 +44,14 @@ const App = () => {
       setUser(user);
       blogService.setToken(user.token);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const initialUsers = await userService.getAll();
+      setUsers(initialUsers);
+    };
+    fetchData();
   }, []);
 
   const dispatch = useDispatch();
@@ -178,6 +190,11 @@ const App = () => {
     </Togglable>
   );
 
+  const match = useRouteMatch("/users/:id");
+  const author = match
+    ? users.find((author) => author.id === match.params.id)
+    : null;
+
   return (
     <>
       <h1>Blogs</h1>
@@ -193,8 +210,11 @@ const App = () => {
       {!user && registrationForm()}
 
       <Switch>
+        <Route path="/users/:id">
+          <User author={author} />
+        </Route>
         <Route path="/users">
-          <Users />
+          <Users users={users} />
         </Route>
 
         <Route path="/">
