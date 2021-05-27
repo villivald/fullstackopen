@@ -12,6 +12,7 @@ import RegistrationForm from "./components/RegistrationForm";
 import Togglable from "./components/Togglable";
 import Users from "./components/Users";
 import User from "./components/User";
+import CurrentBlog from "./components/CurrentBlog";
 
 import { useDispatch } from "react-redux";
 import { showNotification } from "./reducers/notificationReducer";
@@ -195,6 +196,11 @@ const App = () => {
     ? users.find((author) => author.id === match.params.id)
     : null;
 
+  const matchBlog = useRouteMatch("/blogs/:id");
+  const blog = matchBlog
+    ? blogs.find((blog) => blog.id === matchBlog.params.id)
+    : null;
+
   return (
     <>
       <h1>Blogs</h1>
@@ -213,6 +219,9 @@ const App = () => {
         <Route path="/users/:id">
           <User author={author} />
         </Route>
+        <Route path="/blogs/:id">
+          <CurrentBlog blog={blog} blogUpdate={blogUpdate} />
+        </Route>
         <Route path="/users">
           <Users users={users} />
         </Route>
@@ -229,12 +238,7 @@ const App = () => {
                     .sort((min, max) => max.likes - min.likes)
                     .filter((blog) => blog.user.username === user.username)
                     .map((blog) => (
-                      <Blog
-                        key={blog.id}
-                        blog={blog}
-                        blogUpdate={blogUpdate}
-                        blogRemove={blogRemove}
-                      />
+                      <Blog key={blog.id} blog={blog} blogRemove={blogRemove} />
                     ))}
                 </div>
               </>
