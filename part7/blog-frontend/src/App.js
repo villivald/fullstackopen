@@ -13,6 +13,7 @@ import Togglable from "./components/Togglable";
 import Users from "./components/Users";
 import User from "./components/User";
 import CurrentBlog from "./components/CurrentBlog";
+import Menu from "./components/Menu";
 
 import { useDispatch } from "react-redux";
 import { showNotification } from "./reducers/notificationReducer";
@@ -22,12 +23,10 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
   const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
 
   const blogFormRef = useRef();
-
-  const [users, setUsers] = useState([]);
 
   // EFFECTS
   useEffect(() => {
@@ -203,6 +202,7 @@ const App = () => {
 
   return (
     <>
+      <Menu />
       <h1>Blogs</h1>
       {user && (
         <div className="log">

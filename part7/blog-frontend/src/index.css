@@ -23,3 +23,32 @@
   border-radius: 5px;
   padding: 5px;
 }
+
+.menuContainer {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 15px;
+  background-color: #1b4e55;
+  padding: 30px;
+}
+
+p.menuLink > a {
+  color: white;
+  text-decoration-line: none;
+  text-transform: uppercase;
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 3px;
+}
+
+.menuLink:hover {
+  transform: scale(1.1);
+}
+.menuLink:active {
+  transform: scale(1);
+}
+
+.active {
+  background-color: red;
+  color: #fff;
+}
