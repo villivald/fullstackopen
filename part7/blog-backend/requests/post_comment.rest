@@ -1,0 +1,7 @@
+POST http://localhost:3003/api/blogs/6074622ce511b670a1530fc6/comments
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkxlYnJvbiBKYW1lcyIsImlkIjoiNjA3NDYxZTBlNTExYjY3MGExNTMwZmM0IiwiaWF0IjoxNjIyMjg1Njk2LCJleHAiOjE2MjIyODkyOTZ9.ClKZ8xlL3WQ8ysDIv84RdcLD_HbKsSywVLcNdiBrNTg
+
+{
+    "comments": "Hate this blog"
+}

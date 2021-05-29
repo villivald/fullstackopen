@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const CurrentBlog = ({ blog, blogUpdate }) => {
   if (!blog) {
@@ -21,6 +22,12 @@ const CurrentBlog = ({ blog, blogUpdate }) => {
         </button>
       </p>
       <p>Added by {blog.user.username}</p>
+      <h2>Comments</h2>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={uuidv4()}>{comment}</li>
+        ))}
+      </ul>
     </div>
   );
 };

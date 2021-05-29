@@ -97,4 +97,25 @@ blogsRouter.put("/:id", async (request, response) => {
   }
 });
 
+blogsRouter.post("/:id/comments", async (request, response) => {
+  const body = request.body;
+  const id = request.params.id;
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(id);
+  updatedBlog.comments = updatedBlog.comments.concat(body.comments);
+
+  const savedBlog = await updatedBlog.save();
+
+  await savedBlog
+    .populate({ path: "user", select: ["name", "username"] })
+    .execPopulate();
+
+  response.status(200).json(savedBlog.toJSON());
+});
+
 module.exports = blogsRouter;
