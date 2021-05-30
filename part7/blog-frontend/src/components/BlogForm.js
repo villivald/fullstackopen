@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
 
 const BlogForm = ({ createBlog }) => {
   const [newBlogTitle, setNewBlogTitle] = useState("");
@@ -64,9 +65,16 @@ const BlogForm = ({ createBlog }) => {
             className="urlInput"
           />
         </p>
-        <button id="newBlogButton" type="submit">
+
+        <Button
+          variant="contained"
+          color="primary"
+          id="newBlogButton"
+          type="submit"
+          style={{ marginBottom: "10px" }}
+        >
           Add
-        </button>
+        </Button>
       </form>
     </div>
   );

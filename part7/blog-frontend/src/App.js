@@ -14,6 +14,7 @@ import Users from "./components/Users";
 import User from "./components/User";
 import CurrentBlog from "./components/CurrentBlog";
 import Menu from "./components/Menu";
+import Button from "@material-ui/core/Button";
 
 import { useDispatch } from "react-redux";
 import { showNotification } from "./reducers/notificationReducer";
@@ -83,6 +84,17 @@ const App = () => {
         )
       );
     }
+  };
+
+  // UPDATE BLOG
+  const createComment = async (blogObject) => {
+    await blogService.comment(blogObject);
+
+    const updatedBlog = { ...blogObject };
+
+    setBlogs(
+      blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+    );
   };
 
   // UPDATE BLOG
@@ -203,49 +215,59 @@ const App = () => {
   return (
     <>
       <Menu />
-      <h1>Blogs</h1>
-      {user && (
-        <div className="log">
-          {user.username} is logged in
-          <button style={{ maxWidth: "60px" }} onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      )}
-      <Notification />
-      {!user && registrationForm()}
-
-      <Switch>
-        <Route path="/users/:id">
-          <User author={author} />
-        </Route>
-        <Route path="/blogs/:id">
-          <CurrentBlog blog={blog} blogUpdate={blogUpdate} />
-        </Route>
-        <Route path="/users">
-          <Users users={users} />
-        </Route>
-
-        <Route path="/">
-          <div>
-            {user === null ? (
-              loginForm()
-            ) : (
-              <>
-                {blogForm()}
-                <div>
-                  {blogs
-                    .sort((min, max) => max.likes - min.likes)
-                    .filter((blog) => blog.user.username === user.username)
-                    .map((blog) => (
-                      <Blog key={blog.id} blog={blog} blogRemove={blogRemove} />
-                    ))}
-                </div>
-              </>
-            )}
+      <div className="mainWrapper">
+        <h1>Blogs</h1>
+        {user && (
+          <div className="log">
+            {user.username} is logged in
+            <Button variant="contained" onClick={handleLogout}>
+              Logout
+            </Button>
           </div>
-        </Route>
-      </Switch>
+        )}
+        <Notification />
+        {!user && registrationForm()}
+
+        <Switch>
+          <Route path="/users/:id">
+            <User author={author} />
+          </Route>
+          <Route path="/blogs/:id">
+            <CurrentBlog
+              blog={blog}
+              blogUpdate={blogUpdate}
+              createComment={createComment}
+            />
+          </Route>
+          <Route path="/users">
+            <Users users={users} />
+          </Route>
+
+          <Route path="/">
+            <div>
+              {user === null ? (
+                loginForm()
+              ) : (
+                <>
+                  {blogForm()}
+                  <div className="blogGrid">
+                    {blogs
+                      .sort((min, max) => max.likes - min.likes)
+                      .filter((blog) => blog.user.username === user.username)
+                      .map((blog) => (
+                        <Blog
+                          key={blog.id}
+                          blog={blog}
+                          blogRemove={blogRemove}
+                        />
+                      ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </Route>
+        </Switch>
+      </div>
     </>
   );
 };

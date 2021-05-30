@@ -1,3 +1,14 @@
+body {
+  margin: 0;
+}
+
+.mainWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+
 .error {
   color: red;
   background: lightgrey;
@@ -10,18 +21,19 @@
 
 .log {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
   margin-bottom: 15px;
+  font-size: 1.3rem;
 }
 
 .blog-container {
-  border: 1px solid black;
-  width: 250px;
-  margin-bottom: 10px;
-  margin-top: 5px;
-  border-radius: 5px;
-  padding: 5px;
+  padding: 10px;
+}
+
+.blogTitle {
+  margin-bottom: 15px;
 }
 
 .menuContainer {
@@ -51,4 +63,23 @@ p.menuLink > a {
 .active {
   background-color: red;
   color: #fff;
+}
+
+.addNew {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 20px 0;
+}
+
+.blogGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.likeContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
 }

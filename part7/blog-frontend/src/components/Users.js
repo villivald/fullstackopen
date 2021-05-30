@@ -1,29 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const Users = ({ users }) => {
   const userData = users.map((user) => (
-    <div
-      key={user.id}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 3fr",
-      }}
-    >
+    <ListItem key={user.id}>
       <Link to={`/users/${user.id}`}>
-        <p>{user.username}</p>
+        <ListItemText primary={user.username} />
       </Link>
-      <p>{user.blogs.length}</p>
-    </div>
+      <ListItemText
+        primary={user.blogs.length}
+        style={{ marginLeft: "100px", textAlign: "right" }}
+      />
+    </ListItem>
   ));
 
   return (
     <div>
-      <h1>Users</h1>
-      <div style={{ marginLeft: "20%" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h1>Users</h1>
         <b>Blogs created</b>
       </div>
-      <div>{userData}</div>
+      <List>{userData}</List>
     </div>
   );
 };

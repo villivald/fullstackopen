@@ -1,5 +1,6 @@
 import React, { useState, useImperativeHandle } from "react";
 import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
 
 const Togglable = React.forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
@@ -17,8 +18,10 @@ const Togglable = React.forwardRef((props, ref) => {
 
   return (
     <div>
-      <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+      <div style={hideWhenVisible} className="addNew">
+        <Button variant="contained" color="primary" onClick={toggleVisibility}>
+          {props.buttonLabel}
+        </Button>
       </div>
       <div
         className="hiddenByDefault"
@@ -26,7 +29,14 @@ const Togglable = React.forwardRef((props, ref) => {
       >
         <div style={showWhenVisible} className="togglableContent">
           {props.children}
-          <button onClick={toggleVisibility}>{props.cancelButtonLabel}</button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={toggleVisibility}
+            style={{ marginBottom: "20px" }}
+          >
+            {props.cancelButtonLabel}
+          </Button>
         </div>
       </div>
     </div>

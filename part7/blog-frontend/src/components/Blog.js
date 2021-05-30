@@ -1,5 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import Link from "@material-ui/core/Link";
 
 const Blog = ({ blog, blogRemove }) => {
   const removeHandler = () => {
@@ -8,17 +11,24 @@ const Blog = ({ blog, blogRemove }) => {
   };
 
   return (
-    <div className="blog-container">
+    <Paper elevation={3} className="blog-container">
       <div className="blogTitle">
-        <Link to={`/blogs/${blog.id}`}>
+        <Link component={RouterLink} to={`/blogs/${blog.id}`}>
           <strong>{blog.title} </strong>
           by
           <strong> {blog.author}</strong>
         </Link>
       </div>
 
-      <button onClick={removeHandler}>Remove</button>
-    </div>
+      <Button
+        size="small"
+        variant="contained"
+        color="secondary"
+        onClick={removeHandler}
+      >
+        Remove
+      </Button>
+    </Paper>
   );
 };
 export default Blog;
