@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, UserInputError, gql } = require("apollo-server");
 const { v1: uuid } = require("uuid");
 
 let authors = [
@@ -80,6 +80,11 @@ let books = [
 ];
 
 const typeDefs = gql`
+  enum YesNo {
+    YES
+    NO
+  }
+
   type Author {
     name: String!
     born: Int
@@ -99,7 +104,7 @@ const typeDefs = gql`
     authorCount: Int!
     bookCount: Int!
     allBooks(author: String, genre: String): [Book!]!
-    allAuthors: [Author!]!
+    allAuthors(born: YesNo): [Author!]!
     findAuthor(name: String!): Author
   }
 
@@ -110,6 +115,7 @@ const typeDefs = gql`
       published: Int!
       genres: [String]
     ): Book
+    editBorn(name: String!, born: Int!): Author
   }
 `;
 
@@ -129,7 +135,14 @@ const resolvers = {
       }
       return books;
     },
-    allAuthors: () => authors,
+    allAuthors: (root, args) => {
+      if (!args.born) {
+        return authors;
+      }
+      const byBorn = (author) =>
+        args.born === "YES" ? author.born : !author.born;
+      return authors.filter(byBorn);
+    },
     findAuthor: (root, args) => authors.find((a) => a.name === args.name),
   },
   Author: {
@@ -139,6 +152,12 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
+      if (books.find((book) => book.title === args.title)) {
+        throw new UserInputError("Book title must be unique", {
+          invalidArgs: args.title,
+        });
+      }
+
       const book = { ...args, id: uuid() };
       const currentAuthor = args.author;
 
@@ -151,6 +170,19 @@ const resolvers = {
 
       books = books.concat(book);
       return book;
+    },
+
+    editBorn: (root, args) => {
+      const author = authors.find((author) => author.name === args.name);
+      if (!author) {
+        return null;
+      }
+
+      const updatedAuthor = { ...author, born: args.born };
+      authors = authors.map((author) =>
+        author.name === args.name ? updatedAuthor : author
+      );
+      return updatedAuthor;
     },
   },
 };
