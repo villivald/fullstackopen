@@ -5,7 +5,7 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 
 const App = () => {
-  const query = gql`
+  const authorsQuery = gql`
     query {
       allAuthors {
         name
@@ -14,8 +14,18 @@ const App = () => {
       }
     }
   `;
+  const booksQuery = gql`
+    query {
+      allBooks {
+        title
+        author
+        published
+      }
+    }
+  `;
 
-  const fetchedAuthors = useQuery(query);
+  const fetchedAuthors = useQuery(authorsQuery);
+  const fetchedBooks = useQuery(booksQuery);
 
   const [page, setPage] = useState("authors");
 
@@ -29,7 +39,7 @@ const App = () => {
 
       <Authors show={page === "authors"} fetchedAuthors={fetchedAuthors} />
 
-      <Books show={page === "books"} />
+      <Books show={page === "books"} fetchedBooks={fetchedBooks} />
 
       <NewBook show={page === "add"} />
     </div>

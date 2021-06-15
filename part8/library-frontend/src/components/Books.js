@@ -1,13 +1,13 @@
-import React from 'react'
+import React from "react";
 
 const Books = (props) => {
   if (!props.show) {
-    return null
+    return null;
   }
 
-  const books = []
-
-  return (
+  return props.fetchedBooks.loading ? (
+    "loading"
+  ) : (
     <div>
       <h2>books</h2>
 
@@ -15,24 +15,20 @@ const Books = (props) => {
         <tbody>
           <tr>
             <th></th>
-            <th>
-              author
-            </th>
-            <th>
-              published
-            </th>
+            <th>author</th>
+            <th>published</th>
           </tr>
-          {books.map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
+          {props.fetchedBooks.data.allBooks.map((book) => (
+            <tr key={book.title}>
+              <td>{book.title}</td>
+              <td>{book.author}</td>
+              <td>{book.published}</td>
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default Books
+export default Books;
