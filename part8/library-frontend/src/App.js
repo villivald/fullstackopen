@@ -41,7 +41,11 @@ const App = () => {
 
       <Books show={page === "books"} fetchedBooks={fetchedBooks} />
 
-      <NewBook show={page === "add"} />
+      <NewBook
+        show={page === "add"}
+        authorsQuery={authorsQuery}
+        booksQuery={booksQuery}
+      />
     </div>
   );
 };
