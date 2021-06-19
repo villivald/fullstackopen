@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { EDIT_AUTHOR } from "../queries";
+import Select from "react-select";
 
 const Authors = (props) => {
-  const [name, setName] = useState("");
   const [born, setBorn] = useState("");
+  const [name, setName] = useState(null);
 
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: props.authorsQuery }],
@@ -19,7 +20,7 @@ const Authors = (props) => {
 
     editAuthor({ variables: { name, born } });
 
-    setName("");
+    setName(null);
     setBorn("");
   };
 
@@ -45,13 +46,14 @@ const Authors = (props) => {
         </tbody>
       </table>
       <form onSubmit={submit}>
-        <div>
-          Name:
-          <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
-        </div>
+        <Select
+          defaultValue={name}
+          onChange={({ value }) => setName(value)}
+          options={props.fetchedAuthors.data.allAuthors.map((a) => ({
+            value: a.name,
+            label: a.name,
+          }))}
+        />
         <div>
           Born:
           <input

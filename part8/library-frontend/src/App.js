@@ -33,6 +33,7 @@ const App = () => {
         show={page === "authors"}
         fetchedAuthors={fetchedAuthors}
         authorsQuery={authorsQuery}
+        setError={notify}
       />
 
       <Books show={page === "books"} fetchedBooks={fetchedBooks} />
