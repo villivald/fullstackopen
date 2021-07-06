@@ -11,7 +11,7 @@ interface Result {
 const calculateExercises = (hours: Array<number>): Result => {
   const periodLength = hours.length;
   const trainingDays = hours.filter((hour) => hour > 0).length;
-  const target = 2;
+  const target = Number(process.argv[2]);
   const average = hours.reduce((a, b) => a + b) / periodLength;
   const success = average >= target;
   const rating = average > target ? 3 : average === target ? 2 : 1;
@@ -21,6 +21,7 @@ const calculateExercises = (hours: Array<number>): Result => {
       : average === target
       ? "Well done. The goal is reached."
       : "Not bad, but you can do better.";
+
   return {
     periodLength: periodLength,
     trainingDays: trainingDays,
@@ -32,4 +33,9 @@ const calculateExercises = (hours: Array<number>): Result => {
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1]));
+let input: Array<number> = [];
+for (let i = 3; i < process.argv.length; i++) {
+  input.push(Number(process.argv[i]));
+}
+
+console.log(calculateExercises(input));
