@@ -33,7 +33,7 @@ const calculateExercises = (hours: Array<number>): Result => {
   };
 };
 
-let input: Array<number> = [];
+const input: Array<number> = [];
 for (let i = 3; i < process.argv.length; i++) {
   input.push(Number(process.argv[i]));
 }
